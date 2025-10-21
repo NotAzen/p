@@ -8,6 +8,7 @@ public class PlayerMovement : MonoBehaviour
 
     public Rigidbody2D rb;
 
+    [Header("Movement Statistics")] // headers separate sections in the inspector
     public float acceleration = 1f;
 
     [Tooltip("Multiply velocity each frame to simulate friction (0..1). 1 = no friction")] // wow look a tooltip idk ill probably make this useful
@@ -16,6 +17,13 @@ public class PlayerMovement : MonoBehaviour
 
     [Tooltip("Sudden dash forward. Larger numbers go farther.")]
     public float dashStrength = 10f;
+    public float dashStamina = 10f;
+    public float staminaRegenCooldown = 1f;  // time after dashing before stamina starts regenerating
+
+    [Header("Player Statistics")]
+    public float maxHealth = 100f;
+    public float maxStamina = 30f;
+    public float staminaRegenRate = 5f;      // stamina regenerated per second
 
     // --------------------------------------------------------------------------------- //
     // PRIVATE VARIABLES
@@ -27,7 +35,18 @@ public class PlayerMovement : MonoBehaviour
     private Vector2 moveInput;          // input vector
     private bool dashRequested;         // dash button boolean
 
+    private float currentHealth;        // current health
+    private float currentStamina;       // current stamina
+
+    private float startRegenTime;       // time when stamina regen starts
+
     // --------------------------------------------------------------------------------- //
+    void Start()
+    {
+        // initialize player stats
+        currentHealth = maxHealth;
+        currentStamina = maxStamina;
+    }
 
     // movement input handler
     public void OnMove(InputValue value)
@@ -45,26 +64,51 @@ public class PlayerMovement : MonoBehaviour
             dashRequested = true;
         }
     }
+    
+    // movement handlers
+    private void Dash()
+    {
+        // add a sudden burst of velocity in the direction of movement input
+        Vector2 dashDirection = moveInput.normalized;
+        additionalVelocity = dashDirection * dashStrength;
 
-    // Update is called once per frame
-    void Update()
+        currentStamina -= dashStamina; // reduce stamina on dash (arbitrary value, adjust as needed)
+
+        // reset dash request
+        dashRequested = false;
+    }
+
+    private void MovePlayer()
     {
         // calculate player acceleration based on input
         inputAcceleration = moveInput * acceleration;
 
         // update player velocity based on acceleration
         inputVelocity += inputAcceleration * Time.deltaTime;
-
-        // dashing :3
-        if (dashRequested)
+    }
+    private void RegenerateStamina()
+    {
+        // if enough time has passed since last dash, regenerate stamina
+        if (Time.time >= startRegenTime)
         {
-            // add a sudden burst of velocity in the direction of movement input
-            Vector2 dashDirection = moveInput.normalized;
-            additionalVelocity = dashDirection * dashStrength;
-
-            // reset dash request
-            dashRequested = false;
+            currentStamina += staminaRegenRate * Time.deltaTime;
+            currentStamina = Mathf.Min(currentStamina, maxStamina); // clamp to max stamina
         }
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        // whenever dash is requested, perform dash
+        if (dashRequested) { Dash(); }
+
+        MovePlayer();
+
+        // calculate player acceleration based on input
+        inputAcceleration = moveInput * acceleration;
+
+        // update player velocity based on acceleration
+        inputVelocity += inputAcceleration * Time.deltaTime;
 
         // apply some friction to slow down over time
         inputVelocity *= Mathf.Pow(frictionCoefficient, Time.deltaTime);

@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 621d5fbb8b1a4b24284d58c784948f53
+guid: a6016c8cd863fb643865fe34d5c89201
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -6525241329157554079
-    second: staminabar_0
+      213: -7453663102426592672
+    second: staminamask_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -126,13 +126,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: staminabar_0
+      name: staminamask_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 2192
-        height: 362
+        width: 1583
+        height: 371
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -141,8 +141,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 160cdd5559fa175a0800000000000000
-      internalID: -6525241329157554079
+      spriteID: 06a4d6846e44f8890800000000000000
+      internalID: -7453663102426592672
       vertices: []
       indices: 
       edges: []
@@ -160,8 +160,7 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable:
-      staminabar_0: -6525241329157554079
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
