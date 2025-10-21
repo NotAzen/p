@@ -72,7 +72,9 @@ public class PlayerMovement : MonoBehaviour
         Vector2 dashDirection = moveInput.normalized;
         additionalVelocity = dashDirection * dashStrength;
 
-        currentStamina -= dashStamina; // reduce stamina on dash (arbitrary value, adjust as needed)
+        // reduce stamina on dash
+        currentStamina -= dashStamina;
+        currentStamina = Mathf.Max(currentStamina, 0f); // clamp to min stamina
 
         // reset dash request
         dashRequested = false;
@@ -85,7 +87,16 @@ public class PlayerMovement : MonoBehaviour
 
         // update player velocity based on acceleration
         inputVelocity += inputAcceleration * Time.deltaTime;
+
+        // apply some friction to slow down over time
+        inputVelocity *= Mathf.Pow(frictionCoefficient, Time.deltaTime);
+        additionalVelocity *= Mathf.Pow(frictionCoefficient, Time.deltaTime);
+
+        // add additional velocity (like from dashing) to player velocity
+        rb.linearVelocity = inputVelocity + additionalVelocity;
     }
+
+    // statistics handlers
     private void RegenerateStamina()
     {
         // if enough time has passed since last dash, regenerate stamina
@@ -103,24 +114,5 @@ public class PlayerMovement : MonoBehaviour
         if (dashRequested) { Dash(); }
 
         MovePlayer();
-
-        // calculate player acceleration based on input
-        inputAcceleration = moveInput * acceleration;
-
-        // update player velocity based on acceleration
-        inputVelocity += inputAcceleration * Time.deltaTime;
-
-        // apply some friction to slow down over time
-        inputVelocity *= Mathf.Pow(frictionCoefficient, Time.deltaTime);
-        additionalVelocity *= Mathf.Pow(frictionCoefficient, Time.deltaTime);
-
-        // add additional velocity (like from dashing) to player velocity
-        rb.linearVelocity = inputVelocity + additionalVelocity;
-
-        //// if the velocity is a nonzero vector, move the player
-        //if (trueVelocity != Vector3.zero)
-        //{
-        //    transform.position += trueVelocity * Time.deltaTime;
-        //}
     }
 }
