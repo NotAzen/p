@@ -1,37 +1,45 @@
 using UnityEngine;
+using TMPro;
+using System.IO;
+using Unity.VisualScripting;
 
 public class StatisticPercentage : MonoBehaviour
 {
     // --------------------------------------------------------------------------------- //
     // PUBLIC VARIABLES
 
-    [SerializeField] GameObject Player;
-
     [Header("Statistics")]
     [SerializeField] GameObject HPStatsUI;
     [SerializeField] GameObject StaminaStatsUI;
 
-    // class for handling UI updates related to the statistic it tracks
-    class PlayerStatisticHUDHandler
+    // Make the handler class public to match the accessibility of the field
+    public class PlayerStatisticHUDHandler
     {
         // public variables for the UI GameObject and the game statistic value
         public GameObject UIObject;
-        public TextMesh UIText;
-        public float GameStatistic;
+        public TextMeshProUGUI UIText;
+
+        private float displayStatistic;
+        private float smoothingSpeed = 5f;
 
         // constructor that takes a UI GameObject and a game statistic value (class initialization)
-        public PlayerStatisticHUDHandler(GameObject uiObject, float gameStatistic)
+        public PlayerStatisticHUDHandler(GameObject uiObject)
         {
+            // initialize variables
             UIObject = uiObject;
-            GameStatistic = gameStatistic;
+            UIText = uiObject.transform.Find("Text").GetComponent<TextMeshProUGUI>();
+            
+            displayStatistic = 0f;
         }
 
         // ----------------------------------------------------------------------------------- //
         // PUBLIC METHODS
 
-        public void UpdateUI()
+        public void UpdateDisplay(float statistic)
         {
-            Debug.Log("Updating UI...");
+            displayStatistic = Mathf.Lerp(displayStatistic, statistic, smoothingSpeed * Time.deltaTime);
+            string displayNum = Mathf.RoundToInt(displayStatistic).ToString();
+            UIText.text = displayNum;
         }
 
         public void UpdateText()
@@ -39,6 +47,10 @@ public class StatisticPercentage : MonoBehaviour
             Debug.Log("Updating Text...");
         }
     }
+
+    // ui handlers for health and stamina
+    public PlayerStatisticHUDHandler healthHandler;
+    public PlayerStatisticHUDHandler staminaHandler;
 
     // --------------------------------------------------------------------------------- //
     // PRIVATE VARIABLES
@@ -52,7 +64,8 @@ public class StatisticPercentage : MonoBehaviour
         //FullHP = HPBar.transform;
         //FullStamina = StaminaBar.transform;
 
-        
+        healthHandler = new PlayerStatisticHUDHandler(HPStatsUI);
+        staminaHandler = new PlayerStatisticHUDHandler(StaminaStatsUI);
     }
 
     // Update is called once per frame
@@ -60,8 +73,5 @@ public class StatisticPercentage : MonoBehaviour
     {
         
     }
-    public void ShowPercentage()
-    {
-        Debug.Log("Showing statistic percentage...");
-    }
+
 }

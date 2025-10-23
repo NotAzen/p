@@ -23,7 +23,14 @@ public class PlayerMovement : MonoBehaviour
     [Header("Player Statistics")]
     public float maxHealth = 100f;
     public float maxStamina = 30f;
-    public float staminaRegenRate = 5f;      // stamina regenerated per second
+    public float staminaRegenRate = 10f;      // stamina regenerated per second
+
+    [Header("Other Objects")]
+    public StatisticPercentage StatisticPercentage;
+
+    [Header("uhmm pretty please dont mess with this")]
+    public float currentHealth;        // current health
+    public float currentStamina;       // current stamina
 
     // --------------------------------------------------------------------------------- //
     // PRIVATE VARIABLES
@@ -34,9 +41,6 @@ public class PlayerMovement : MonoBehaviour
 
     private Vector2 moveInput;          // input vector
     private bool dashRequested;         // dash button boolean
-
-    private float currentHealth;        // current health
-    private float currentStamina;       // current stamina
 
     private float startRegenTime;       // time when stamina regen starts
 
@@ -76,6 +80,9 @@ public class PlayerMovement : MonoBehaviour
         currentStamina -= dashStamina;
         currentStamina = Mathf.Max(currentStamina, 0f); // clamp to min stamina
 
+        // set time to start regenerating stamina
+        startRegenTime = Time.time + staminaRegenCooldown; 
+
         // reset dash request
         dashRequested = false;
     }
@@ -112,7 +119,12 @@ public class PlayerMovement : MonoBehaviour
     {
         // whenever dash is requested, perform dash
         if (dashRequested) { Dash(); }
+        RegenerateStamina();
 
         MovePlayer();
+
+        // communicate with other systems (like UI) here if needed
+        StatisticPercentage.healthHandler.UpdateDisplay(currentHealth);
+        StatisticPercentage.staminaHandler.UpdateDisplay(currentStamina);
     }
 }
