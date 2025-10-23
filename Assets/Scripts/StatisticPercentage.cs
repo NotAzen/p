@@ -12,7 +12,7 @@ public class StatisticPercentage : MonoBehaviour
     [SerializeField] GameObject StaminaStatsUI;
 
     // class for handling UI updates related to the statistic it tracks
-    class UIHandler
+    class PlayerStatisticHUDHandler
     {
         // public variables for the UI GameObject and the game statistic value
         public GameObject UIObject;
@@ -20,7 +20,7 @@ public class StatisticPercentage : MonoBehaviour
         public float GameStatistic;
 
         // constructor that takes a UI GameObject and a game statistic value (class initialization)
-        public UIHandler(GameObject uiObject, float gameStatistic)
+        public PlayerStatisticHUDHandler(GameObject uiObject, float gameStatistic)
         {
             UIObject = uiObject;
             GameStatistic = gameStatistic;
