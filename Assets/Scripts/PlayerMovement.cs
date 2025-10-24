@@ -26,7 +26,7 @@ public class PlayerMovement : MonoBehaviour
     public float staminaRegenRate = 10f;      // stamina regenerated per second
 
     [Header("Other Objects")]
-    public StatisticPercentage StatisticPercentage;
+    [SerializeField] StatisticPercentage StatisticPercentage;
 
     [Header("uhmm pretty please dont mess with this")]
     public float currentHealth;        // current health
@@ -124,7 +124,7 @@ public class PlayerMovement : MonoBehaviour
         MovePlayer();
 
         // communicate with other systems (like UI) here if needed
-        StatisticPercentage.healthHandler.UpdateDisplay(currentHealth);
-        StatisticPercentage.staminaHandler.UpdateDisplay(currentStamina);
+        StatisticPercentage.healthHandler.UpdateDisplay(currentHealth, maxHealth);
+        StatisticPercentage.staminaHandler.UpdateDisplay(currentStamina, maxStamina);
     }
 }

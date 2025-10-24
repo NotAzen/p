@@ -1,6 +1,5 @@
 using UnityEngine;
 using TMPro;
-using System.IO;
 using Unity.VisualScripting;
 
 public class StatisticPercentage : MonoBehaviour
@@ -12,12 +11,17 @@ public class StatisticPercentage : MonoBehaviour
     [SerializeField] GameObject HPStatsUI;
     [SerializeField] GameObject StaminaStatsUI;
 
-    // Make the handler class public to match the accessibility of the field
+    // funny class thingy that manages all the UI stuff for a player statistic
     public class PlayerStatisticHUDHandler
     {
-        // public variables for the UI GameObject and the game statistic value
-        public GameObject UIObject;
-        public TextMeshProUGUI UIText;
+        // variables needed for this class to even function properly LOL
+        private GameObject UIObject;
+        private TextMeshProUGUI UIText;
+        private GameObject OverallMask;
+        private RectTransform BarPosition;
+
+        private RectTransform FullBarPosition;
+        private RectTransform EmptyBarPosition;
 
         private float displayStatistic;
         private float smoothingSpeed = 5f;
@@ -28,18 +32,33 @@ public class StatisticPercentage : MonoBehaviour
             // initialize variables
             UIObject = uiObject;
             UIText = uiObject.transform.Find("Text").GetComponent<TextMeshProUGUI>();
-            
+            OverallMask = uiObject.transform.Find("OverallMask").gameObject;
+            BarPosition = OverallMask.transform.Find("Bar").GetComponent<RectTransform>();
+
+            FullBarPosition = OverallMask.transform.Find("100Percent").GetComponent<RectTransform>();
+            EmptyBarPosition = OverallMask.transform.Find("0Percent").GetComponent<RectTransform>();
+
             displayStatistic = 0f;
+
+            print("yeah i exist now");
         }
 
         // ----------------------------------------------------------------------------------- //
         // PUBLIC METHODS
 
-        public void UpdateDisplay(float statistic)
+        public void UpdateDisplay(float statistic, float statisticMax)
         {
+            // calculate smoothed display value and percentage
             displayStatistic = Mathf.Lerp(displayStatistic, statistic, smoothingSpeed * Time.deltaTime);
+            float percentage = displayStatistic / statisticMax;
+
+            // number displayed
             string displayNum = Mathf.RoundToInt(displayStatistic).ToString();
             UIText.text = displayNum;
+
+            // bar position update
+            Vector3 newPosition = Vector3.Lerp(EmptyBarPosition.localPosition, FullBarPosition.localPosition, percentage);
+            BarPosition.localPosition = newPosition;
         }
 
         public void UpdateText()
@@ -55,15 +74,10 @@ public class StatisticPercentage : MonoBehaviour
     // --------------------------------------------------------------------------------- //
     // PRIVATE VARIABLES
 
-    private Transform FullHP;
-    private Transform FullStamina;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        //FullHP = HPBar.transform;
-        //FullStamina = StaminaBar.transform;
-
         healthHandler = new PlayerStatisticHUDHandler(HPStatsUI);
         staminaHandler = new PlayerStatisticHUDHandler(StaminaStatsUI);
     }
