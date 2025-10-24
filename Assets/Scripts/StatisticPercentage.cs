@@ -1,6 +1,7 @@
 using UnityEngine;
 using TMPro;
 using Unity.VisualScripting;
+using System;
 
 public class StatisticPercentage : MonoBehaviour
 {
@@ -12,12 +13,13 @@ public class StatisticPercentage : MonoBehaviour
     [SerializeField] GameObject StaminaStatsUI;
 
     // funny class thingy that manages all the UI stuff for a player statistic
-    public class PlayerStatisticHUDHandler
+    public class StatisticBarHUDHandler
     {
         // variables needed for this class to even function properly LOL
         private TextMeshProUGUI UIText;
         private GameObject OverallMask;
         private RectTransform BarPosition;
+        private RectTransform DifferenceBarPosition;
 
         private RectTransform FullBarPosition;
         private RectTransform EmptyBarPosition;
@@ -25,20 +27,21 @@ public class StatisticPercentage : MonoBehaviour
         private float displayStatistic;
         private float smoothingSpeed = 5f;
 
+        private float startDifferenceTime;
+
         // constructor that takes a UI GameObject and a game statistic value (class initialization)
-        public PlayerStatisticHUDHandler(GameObject uiObject)
+        public StatisticBarHUDHandler(GameObject uiObject)
         {
             // initialize variables
             UIText = uiObject.transform.Find("Text").GetComponent<TextMeshProUGUI>();
-            OverallMask = uiObject.transform.Find("OverallMask").gameObject;
+            OverallMask = uiObject.transform.Find("Overall Mask").gameObject;
             BarPosition = OverallMask.transform.Find("Bar").GetComponent<RectTransform>();
+            DifferenceBarPosition = OverallMask.transform.Find("ChangeBar").GetComponent<RectTransform>();
 
             FullBarPosition = OverallMask.transform.Find("100Percent").GetComponent<RectTransform>();
             EmptyBarPosition = OverallMask.transform.Find("0Percent").GetComponent<RectTransform>();
 
             displayStatistic = 0f;
-
-            print("yeah i exist now");
         }
 
         // ----------------------------------------------------------------------------------- //
@@ -57,17 +60,28 @@ public class StatisticPercentage : MonoBehaviour
             // bar position update
             Vector3 newPosition = Vector3.Lerp(EmptyBarPosition.localPosition, FullBarPosition.localPosition, percentage);
             BarPosition.localPosition = newPosition;
+
+            // check if difference timer needs to be updated
+            if (MathF.Abs(displayStatistic - statistic) > 2f) { UpdateDifferenceTimer(); }
+
+            // update difference bar position when timer is active
+            if (Time.time > startDifferenceTime)
+            {
+                DifferenceBarPosition.localPosition = Vector3.Lerp(DifferenceBarPosition.localPosition, newPosition, 10f * Time.deltaTime);
+            }
         }
 
-        public void UpdateText()
+        public void UpdateDifferenceTimer()
         {
-            Debug.Log("Updating Text...");
+            // set time to start regenerating stamina
+            startDifferenceTime = Time.time + 0.6f;
+            print(startDifferenceTime);
         }
     }
 
     // ui handlers for health and stamina
-    public PlayerStatisticHUDHandler healthHandler;
-    public PlayerStatisticHUDHandler staminaHandler;
+    public StatisticBarHUDHandler healthHandler;
+    public StatisticBarHUDHandler staminaHandler;
 
     // --------------------------------------------------------------------------------- //
     // PRIVATE VARIABLES
@@ -76,8 +90,8 @@ public class StatisticPercentage : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        healthHandler = new PlayerStatisticHUDHandler(HPStatsUI);
-        staminaHandler = new PlayerStatisticHUDHandler(StaminaStatsUI);
+        healthHandler = new StatisticBarHUDHandler(HPStatsUI);
+        staminaHandler = new StatisticBarHUDHandler(StaminaStatsUI);
     }
 
     // Update is called once per frame

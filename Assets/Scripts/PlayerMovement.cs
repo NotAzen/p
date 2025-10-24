@@ -29,8 +29,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] StatisticPercentage StatisticPercentage;
 
     [Header("uhmm pretty please dont mess with this")]
-    public float currentHealth;        // current health
-    public float currentStamina;       // current stamina
+    private float currentHealth;        // current health
+    private float currentStamina;       // current stamina
 
     // --------------------------------------------------------------------------------- //
     // PRIVATE VARIABLES
@@ -118,7 +118,7 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
         // whenever dash is requested, perform dash
-        if (dashRequested) { Dash(); }
+        if (dashRequested && currentStamina > dashStamina) { Dash(); }
         RegenerateStamina();
 
         MovePlayer();
