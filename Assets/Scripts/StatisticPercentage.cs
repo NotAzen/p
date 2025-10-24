@@ -15,7 +15,6 @@ public class StatisticPercentage : MonoBehaviour
     public class PlayerStatisticHUDHandler
     {
         // variables needed for this class to even function properly LOL
-        private GameObject UIObject;
         private TextMeshProUGUI UIText;
         private GameObject OverallMask;
         private RectTransform BarPosition;
@@ -30,7 +29,6 @@ public class StatisticPercentage : MonoBehaviour
         public PlayerStatisticHUDHandler(GameObject uiObject)
         {
             // initialize variables
-            UIObject = uiObject;
             UIText = uiObject.transform.Find("Text").GetComponent<TextMeshProUGUI>();
             OverallMask = uiObject.transform.Find("OverallMask").gameObject;
             BarPosition = OverallMask.transform.Find("Bar").GetComponent<RectTransform>();
