@@ -40,7 +40,8 @@ public class PlayerMovement : MonoBehaviour
     private Vector2 additionalVelocity; // velocity vector added by other means (like dashing)
 
     private Vector2 moveInput;          // input vector
-    private bool dashRequested;         // dash button boolean
+    private bool dashRequested;         // whether dash was requested
+    private float dashRequestTime;      // time when dash was requested
 
     private float startRegenTime;       // time when stamina regen starts
 
@@ -66,6 +67,7 @@ public class PlayerMovement : MonoBehaviour
         if (value.Get<float>() > 0.5f)
         {
             dashRequested = true;
+            dashRequestTime = Time.time + 0.1f;
         }
     }
     
@@ -81,7 +83,7 @@ public class PlayerMovement : MonoBehaviour
         currentStamina = Mathf.Max(currentStamina, 0f); // clamp to min stamina
 
         // set time to start regenerating stamina
-        startRegenTime = Time.time + staminaRegenCooldown; 
+        startRegenTime = Time.time + staminaRegenCooldown;
 
         // reset dash request
         dashRequested = false;
@@ -118,7 +120,7 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
         // whenever dash is requested, perform dash
-        if (dashRequested && currentStamina > dashStamina) { Dash(); }
+        if (dashRequested && dashRequestTime > Time.time && currentStamina > dashStamina) { Dash(); }
         RegenerateStamina();
 
         MovePlayer();
