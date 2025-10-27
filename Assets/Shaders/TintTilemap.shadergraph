@@ -522,10 +522,10 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": -789.0,
-            "y": 578.0,
+            "x": -791.0000610351563,
+            "y": 572.0,
             "width": 131.0,
-            "height": 34.00006103515625
+            "height": 34.0
         }
     },
     "m_Slots": [
@@ -1464,7 +1464,7 @@
     "m_DefaultRefNameVersion": 1,
     "m_RefNameGeneratedByDisplayName": "BaseColor",
     "m_DefaultReferenceName": "_BaseColor",
-    "m_OverrideReferenceName": "TintColor",
+    "m_OverrideReferenceName": "colorONE",
     "m_GeneratePropertyBlock": true,
     "m_UseCustomSlotLabel": false,
     "m_CustomSlotLabel": "",
@@ -1474,9 +1474,9 @@
     "hlslDeclarationOverride": 0,
     "m_Hidden": false,
     "m_Value": {
-        "r": 1.0,
-        "g": 1.0,
-        "b": 1.0,
+        "r": 0.24313724040985108,
+        "g": 0.37843993306159975,
+        "b": 0.529411792755127,
         "a": 1.0
     },
     "isMainColor": false,
@@ -1542,7 +1542,7 @@
     "m_DefaultRefNameVersion": 1,
     "m_RefNameGeneratedByDisplayName": "GlowColor",
     "m_DefaultReferenceName": "_GlowColor",
-    "m_OverrideReferenceName": "BaseColor",
+    "m_OverrideReferenceName": "colorTWO",
     "m_GeneratePropertyBlock": true,
     "m_UseCustomSlotLabel": false,
     "m_CustomSlotLabel": "",
@@ -1552,9 +1552,9 @@
     "hlslDeclarationOverride": 0,
     "m_Hidden": false,
     "m_Value": {
-        "r": 0.0,
-        "g": 0.0,
-        "b": 0.0,
+        "r": 0.3254716992378235,
+        "g": 1.0,
+        "b": 0.7808078527450562,
         "a": 1.0
     },
     "isMainColor": false,
