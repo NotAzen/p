@@ -206,5 +206,3 @@ MonoBehaviour:
   maxStamina: 30
   staminaRegenRate: 10
   StatisticPercentage: {fileID: 0}
-  currentHealth: 0
-  currentStamina: 0

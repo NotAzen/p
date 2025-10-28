@@ -80,7 +80,6 @@ public class PlayerMovement : MonoBehaviour
 
         // reduce stamina on dash
         currentStamina -= dashStamina;
-        currentStamina = Mathf.Max(currentStamina, 0f); // clamp to min stamina
 
         // set time to start regenerating stamina
         startRegenTime = Time.time + staminaRegenCooldown;
@@ -120,7 +119,7 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
         // whenever dash is requested, perform dash
-        if (dashRequested && dashRequestTime > Time.time && currentStamina > dashStamina) { Dash(); }
+        if (dashRequested && dashRequestTime > Time.time && currentStamina >= dashStamina) { Dash(); }
         RegenerateStamina();
 
         MovePlayer();
