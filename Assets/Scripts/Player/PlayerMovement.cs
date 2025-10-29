@@ -35,6 +35,10 @@ public class PlayerMovement : MonoBehaviour
     // --------------------------------------------------------------------------------- //
     // PRIVATE VARIABLES
 
+    [SerializeField] private ParticleSystem dashParticles; // dash particle effect
+    private ParticleSystem dashParticlesInstance;          // dash particle instance
+    private ParticleSystem.EmissionModule dashParticlesEmission; // dash particle emission module
+
     private Vector2 inputAcceleration;  // acceleration vector
     private Vector2 inputVelocity;      // velocity vector
     private Vector2 additionalVelocity; // velocity vector added by other means (like dashing)
@@ -42,6 +46,7 @@ public class PlayerMovement : MonoBehaviour
     private Vector2 moveInput;          // input vector
     private bool dashRequested;         // whether dash was requested
     private float dashRequestTime;      // time when dash was requested
+    private bool isDashing;             // whether player is currently dashing
 
     private float startRegenTime;       // time when stamina regen starts
 
@@ -86,6 +91,17 @@ public class PlayerMovement : MonoBehaviour
 
         // reset dash request
         dashRequested = false;
+
+        // play dash particles
+        dashParticlesInstance = Instantiate(dashParticles, transform.position, Quaternion.identity);
+        Destroy(dashParticlesInstance.gameObject, dashParticlesInstance.main.duration);
+
+        // temporarily mark player as dashing (for afterimage effect)
+        isDashing = true;
+
+        // create afterimage effect i hope
+        PlayerAfterimagePool.Instance.GetFromPool();
+
     }
 
     private void MovePlayer()
@@ -119,9 +135,22 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
         // whenever dash is requested, perform dash
-        if (dashRequested && dashRequestTime > Time.time && currentStamina >= dashStamina) { Dash(); }
+        if (dashRequested && dashRequestTime > Time.time && currentStamina >= dashStamina && moveInput != Vector2.zero) { Dash(); }
+        if (isDashing) {
+            // dash afterimage
+            PlayerAfterimagePool.Instance.GetFromPool();
+
+            // stop dashing effect when additional velocity is low enough
+            if (additionalVelocity.magnitude < 0.1f)
+            {
+                isDashing = false;
+            }
+        }
+
+        // regenerate stamina each frame
         RegenerateStamina();
 
+        // move the player each frame
         MovePlayer();
 
         // communicate with other systems (like UI) here if needed
