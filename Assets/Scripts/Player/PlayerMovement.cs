@@ -141,7 +141,7 @@ public class PlayerMovement : MonoBehaviour
             PlayerAfterimagePool.Instance.GetFromPool();
 
             // stop dashing effect when additional velocity is low enough
-            if (additionalVelocity.magnitude < 0.1f)
+            if (additionalVelocity.magnitude < 1f)
             {
                 isDashing = false;
             }
