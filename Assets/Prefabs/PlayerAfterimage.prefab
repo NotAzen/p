@@ -101,4 +101,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   activeTime: 0.4
-  initialAlpha: 0.1
+  initialAlpha: 0.2

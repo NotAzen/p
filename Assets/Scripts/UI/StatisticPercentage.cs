@@ -75,7 +75,6 @@ public class StatisticPercentage : MonoBehaviour
         {
             // set time to start regenerating stamina
             startDifferenceTime = Time.time + 0.6f;
-            print(startDifferenceTime);
         }
     }
 

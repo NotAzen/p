@@ -6,15 +6,16 @@ public class PlayerMovement : MonoBehaviour
     // --------------------------------------------------------------------------------- //
     // PUBLIC VARIABLES
 
+    [Header("References")]
     public Rigidbody2D rb;
 
     [Header("Movement Statistics")] // headers separate sections in the inspector
     public float acceleration = 1f;
-
     [Tooltip("Multiply velocity each frame to simulate friction (0..1). 1 = no friction")] // wow look a tooltip idk ill probably make this useful
     [Range(0f, 1f)]
     public float frictionCoefficient = 0.9f;
 
+    [Header("Dash Statistics")]
     [Tooltip("Sudden dash forward. Larger numbers go farther.")]
     public float dashStrength = 10f;
     public float dashStamina = 10f;
@@ -28,27 +29,32 @@ public class PlayerMovement : MonoBehaviour
     [Header("Other Objects")]
     [SerializeField] StatisticPercentage StatisticPercentage;
 
-    [Header("uhmm pretty please dont mess with this")]
-    private float currentHealth;        // current health
-    private float currentStamina;       // current stamina
-
     // --------------------------------------------------------------------------------- //
     // PRIVATE VARIABLES
 
+    [Header("Current Player Statistics")]
+    private float currentHealth;        // current health
+    private float currentStamina;       // current stamina
+
+    [Header("Particle Effects")]
     [SerializeField] private ParticleSystem dashParticles; // dash particle effect
     private ParticleSystem dashParticlesInstance;          // dash particle instance
-    private ParticleSystem.EmissionModule dashParticlesEmission; // dash particle emission module
 
+    [Header("Movement Variables")]
+    private Vector2 moveInput;          // input vector
     private Vector2 inputAcceleration;  // acceleration vector
     private Vector2 inputVelocity;      // velocity vector
     private Vector2 additionalVelocity; // velocity vector added by other means (like dashing)
 
-    private Vector2 moveInput;          // input vector
+    [Header("Dash Variables")]
     private bool dashRequested;         // whether dash was requested
-    private float dashRequestTime;      // time when dash was requested
     private bool isDashing;             // whether player is currently dashing
-
+    private float dashRequestTime;      // time when dash was requested
     private float startRegenTime;       // time when stamina regen starts
+
+    [Header("Afterimage Variables")]
+    private float lastAfterimageTime;    // last time an afterimage was created
+    [SerializeField] private float afterimageTime = 0.05f; // time between afterimages
 
     // --------------------------------------------------------------------------------- //
     void Start()
@@ -138,7 +144,10 @@ public class PlayerMovement : MonoBehaviour
         if (dashRequested && dashRequestTime > Time.time && currentStamina >= dashStamina && moveInput != Vector2.zero) { Dash(); }
         if (isDashing) {
             // dash afterimage
-            PlayerAfterimagePool.Instance.GetFromPool();
+            if (Time.time > lastAfterimageTime + afterimageTime) {
+                PlayerAfterimagePool.Instance.GetFromPool();
+                lastAfterimageTime = Time.time;
+            }
 
             // stop dashing effect when additional velocity is low enough
             if (additionalVelocity.magnitude < 1f)
