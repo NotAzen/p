@@ -57,8 +57,6 @@ public class RoomSpawner : MonoBehaviour
 
         // increment rooms spawned count
         templates.roomsSpawned++;
-
-        spawned = true;
     }
 
     // spawn rooms based on opening direction
@@ -86,6 +84,8 @@ public class RoomSpawner : MonoBehaviour
                 Debug.LogError("Invalid opening direction: " + openingDirection);
                 break;
         }
+
+        spawned = true;
     }
 
     // instantiate room based on opening direction
@@ -93,15 +93,22 @@ public class RoomSpawner : MonoBehaviour
     {
         randomDoorIndex = Random.Range(0, roomType.Length);
         Instantiate(roomType[randomDoorIndex], transform.position, Quaternion.identity);
+        print("SPAWNED ROOM" + transform.position + roomType[randomDoorIndex].name);
     }
 
     // called when another collider enters this trigger
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("SpawnPoint") && other.GetComponent<RoomSpawner>().spawned)
+        // force destroy spawn point if it:
+        // 1. collides with another spawn point
+        // 2. the other spawn point has already spawned a room
+        // 3. this spawn point has a higher opening direction value than the other
+        if (other.CompareTag("SpawnPoint"))
         {
-            Destroy(gameObject);
-            print("fuck you");
+            if (other.GetComponent<RoomSpawner>().spawned || GetComponent<RoomSpawner>().openingDirection > other.GetComponent<RoomSpawner>().openingDirection) {
+                print("DESTOYED SPAWN: " + GetComponent<RoomSpawner>().openingDirection + transform.position);
+                Destroy(gameObject);
+            }
         }
     }
 }
