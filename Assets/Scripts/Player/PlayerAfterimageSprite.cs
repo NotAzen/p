@@ -30,7 +30,6 @@ public class PlayerAfterimageSprite : MonoBehaviour
         playerSR = player.GetComponent<SpriteRenderer>();
 
         // set afterimage properties based on player properties
-        //alpha = alphaSet;
         SR.sprite = playerSR.sprite;
         transform.position = player.position;
         transform.rotation = player.rotation;

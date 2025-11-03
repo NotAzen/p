@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerAfterimagePool : MonoBehaviour
+public class ProjectilePool : MonoBehaviour
 {
     // prefab for the afterimage object
     [SerializeField] private GameObject objectPrefab;
@@ -10,7 +10,7 @@ public class PlayerAfterimagePool : MonoBehaviour
     private Queue<GameObject> availableObjects = new Queue<GameObject>();
 
     // singleton instance
-    public static PlayerAfterimagePool Instance { get; private set; }
+    public static ProjectilePool Instance { get; private set; }
 
     // initialize the singleton instance and grow the pool at start
     private void Awake()
