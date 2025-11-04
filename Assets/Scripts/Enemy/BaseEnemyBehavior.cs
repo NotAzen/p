@@ -52,7 +52,7 @@ public class BaseEnemyBehavior : MonoBehaviour
         {
             hasLineOfSight = ray.collider.gameObject == player;
 
-            GetComponent<Rigidbody2D>.linearVelocity = hasLineOfSight
+            GetComponent<Rigidbody2D>().linearVelocity = hasLineOfSight
                 ? (player.transform.position - transform.position).normalized * 2f
                 : Vector2.zero;
 
