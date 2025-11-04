@@ -45,12 +45,16 @@ public class BaseEnemyBehavior : MonoBehaviour
         RaycastHit2D ray = Physics2D.Raycast(transform.position,
                             player.transform.position - transform.position,
                             sightRange,
-                            LayerMask.GetMask("Default", "Player"));
+                            LayerMask.GetMask("Environment", "Player"));
 
         // if the raycast hits something, check if it's the player
         if (ray.collider != null)
         {
             hasLineOfSight = ray.collider.gameObject == player;
+
+            GetComponent<Rigidbody2D>.linearVelocity = hasLineOfSight
+                ? (player.transform.position - transform.position).normalized * 2f
+                : Vector2.zero;
 
             // draw debug ray
             Debug.DrawRay(transform.position,
