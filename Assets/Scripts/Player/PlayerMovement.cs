@@ -54,7 +54,7 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("Afterimage Variables")]
     private float lastAfterimageTime;    // last time an afterimage was created
-    [SerializeField] private float afterimageTime = 0.05f; // time between afterimages
+    [SerializeField] public float afterimageTime = 0.05f; // time between afterimages
 
     // --------------------------------------------------------------------------------- //
     void Start()

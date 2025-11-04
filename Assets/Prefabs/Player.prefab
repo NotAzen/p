@@ -312,3 +312,8 @@ MonoBehaviour:
   pointer: {fileID: 963785620425176294}
   projectilePrefab: {fileID: 1112240614622115534, guid: 7c8795b19ba92e1409b45f21b1114fac, type: 3}
   pointerDistance: 1
+  shootRequestBuffer: 0.2
+  shootCooldown: 0.5
+  projectileSpeed: 10
+  projectileDamage: 25
+  projectileBounces: 3

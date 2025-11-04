@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -15,9 +16,13 @@ public class ShootingController : MonoBehaviour
     private bool currentlyShooting = false;
     private float shootRequestTime;
     public float shootRequestBuffer = 0.2f;
-    public float projectileSpeed = 10f;
-    public float shootCooldown = 0.5f;
     private float lastShootTime;
+    public float shootCooldown = 0.5f;
+
+    // bullet properties
+    public float projectileSpeed = 10f;
+    public float projectileDamage = 25f;
+    public int projectileBounces = 3;
 
     // --------------------------------------------------------------------------------- //
 
@@ -32,13 +37,35 @@ public class ShootingController : MonoBehaviour
         }
     }
 
+    // get mouse position relative to world
+    private Vector3 GrabMousePosition()
+    {
+        Vector3 mouseScreenPosition = Input.mousePosition;
+        Vector3 mouseWorldPosition = Camera.main.ScreenToWorldPoint(mouseScreenPosition);
+        mouseWorldPosition.z = 0; // ensure the z-coordinate is 0
+
+        return mouseWorldPosition;
+    }
+
+    private void ShootBullet(Vector3 shootingVector)
+    {
+        // instantiate projectile at player position
+        GameObject projectile = ProjectilePool.Instance.GetFromPool();
+        projectile.transform.rotation = pointer.transform.rotation;
+        projectile.GetComponent<Rigidbody2D>().linearVelocity = shootingVector * projectileSpeed;
+
+        // reset shooting flag
+        currentlyShooting = false;
+
+        // update last shoot time
+        lastShootTime = Time.time;
+    }
+
     // Update is called once per frame
     void Update()
     {
         // get mouse position relative to world
-        Vector3 mouseScreenPosition = Input.mousePosition; // Or Mouse.current.position.ReadValue()
-        Vector3 mouseWorldPosition = Camera.main.ScreenToWorldPoint(mouseScreenPosition);
-        mouseWorldPosition.z = 0; // ensure the z-coordinate is 0
+        Vector3 mouseWorldPosition = GrabMousePosition();
 
         // vector from player to mouse
         Vector3 shootingVector = mouseWorldPosition - transform.position;
@@ -52,19 +79,10 @@ public class ShootingController : MonoBehaviour
         float angle = Mathf.Atan2(pointerOffset.y, pointerOffset.x) * Mathf.Rad2Deg;
         pointer.transform.rotation = Quaternion.Euler(0, 0, angle - 90);
 
-        // shoot projectile on left mouse click
+        // attempt to shoot bullet if requested
         if (currentlyShooting && Time.time > lastShootTime + shootCooldown)
         {
-            // instantiate projectile at player position
-            GameObject projectile = ProjectilePool.Instance.GetFromPool();
-            projectile.transform.rotation = pointer.transform.rotation;
-            projectile.GetComponent<Rigidbody2D>().linearVelocity = shootingVector * projectileSpeed;
-
-            // reset shooting flag
-            currentlyShooting = false;
-
-            // update last shoot time
-            lastShootTime = Time.time;
+            ShootBullet(shootingVector);
         }
 
         // reset shooting flag if buffer time exceeded
