@@ -2,11 +2,21 @@ using UnityEngine;
 
 public class BaseEnemyBehavior : MonoBehaviour
 {
+    // adjustable settings
     public float health = 100f;
-    public float sightRange = 10f;
+    public float sightRange = 20f;
+    public float speed = 5f;
 
+    // line of sight to player
     private GameObject player;
     private bool hasLineOfSight = false;
+
+    // damage and explosion particles
+    [SerializeField] private ParticleSystem damageParticles;
+    private ParticleSystem damageParticlesInstance;
+
+    [SerializeField] private ParticleSystem explosionParticles;
+    private ParticleSystem explosionParticlesInstance;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -17,7 +27,7 @@ public class BaseEnemyBehavior : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         // player projectile layer is 8
-        if (collision.gameObject.layer == LayerMask.GetMask("PlayerBullets"))
+        if (collision.gameObject.CompareTag("PlayerProjectile"))
         {
             // Assume the projectile has a ProjectileController script with a damage property
             ProjectileController projectile = collision.gameObject.GetComponent<ProjectileController>();
@@ -27,16 +37,38 @@ public class BaseEnemyBehavior : MonoBehaviour
             {
                 health -= projectile.damage;
             }
+
+            // play damage particles
+            damageParticlesInstance = Instantiate(damageParticles, transform.position, Quaternion.identity);
+            // define particle modules
+            var main = damageParticlesInstance.main;
+            var shape = damageParticlesInstance.shape;
+
+            // set particle color to enemy color
+            main.startColor = GetComponent<SpriteRenderer>().color;
+
+            // orient particle shape towards collision point
+            //Vector2 difference = (Vector2)transform.position - collision.contacts[0].point; <- based on contact point
+            Vector2 difference = collision.relativeVelocity;
+            float angle = Mathf.Atan2(difference.y, difference.x) * Mathf.Rad2Deg;
+            shape.rotation = new Vector3(0, 90 - angle, 0);
         }
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (health <= 0)
+        if (health <= 0f)
         {
+            // play explosion particles
+            explosionParticlesInstance = Instantiate(explosionParticles, transform.position, Quaternion.identity);
+            var explosionMain = explosionParticlesInstance.main;
+            explosionMain.startColor = GetComponent<SpriteRenderer>().color;
+
             Destroy(gameObject);
         }
+
+        print("what");
     }
 
     private void FixedUpdate()
@@ -52,14 +84,20 @@ public class BaseEnemyBehavior : MonoBehaviour
         {
             hasLineOfSight = ray.collider.gameObject == player;
 
-            GetComponent<Rigidbody2D>().linearVelocity = hasLineOfSight
-                ? (player.transform.position - transform.position).normalized * 2f
-                : Vector2.zero;
+            // move towards player if in line of sight
+            if (hasLineOfSight)
+            {
+                GetComponent<Rigidbody2D>().linearVelocity = (player.transform.position - transform.position).normalized * speed;
+            }
+            else
+            {
+                GetComponent<Rigidbody2D>().linearVelocity = Vector2.zero;
+            }
 
-            // draw debug ray
-            Debug.DrawRay(transform.position,
-                          player.transform.position - transform.position,
-                          hasLineOfSight ? Color.green : Color.red);
+                // draw debug ray
+                Debug.DrawRay(transform.position,
+                              player.transform.position - transform.position,
+                              hasLineOfSight ? Color.green : Color.red);
         }
     }
 }

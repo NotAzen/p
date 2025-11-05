@@ -94,7 +94,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3631657909542772393, guid: 2a8f8c2456d78ee4cb265b8a5b8665fb, type: 3}
       propertyPath: m_Name
-      value: RLB Variant
+      value: RLB
+      objectReference: {fileID: 0}
+    - target: {fileID: 4442314067261040350, guid: 2a8f8c2456d78ee4cb265b8a5b8665fb, type: 3}
+      propertyPath: m_Tiles.Array.size
+      value: 230
+      objectReference: {fileID: 0}
+    - target: {fileID: 4442314067261040350, guid: 2a8f8c2456d78ee4cb265b8a5b8665fb, type: 3}
+      propertyPath: m_TileAssetArray.Array.data[0].m_RefCount
+      value: 230
+      objectReference: {fileID: 0}
+    - target: {fileID: 4442314067261040350, guid: 2a8f8c2456d78ee4cb265b8a5b8665fb, type: 3}
+      propertyPath: m_TileColorArray.Array.data[0].m_RefCount
+      value: 230
+      objectReference: {fileID: 0}
+    - target: {fileID: 4442314067261040350, guid: 2a8f8c2456d78ee4cb265b8a5b8665fb, type: 3}
+      propertyPath: m_TileMatrixArray.Array.data[0].m_RefCount
+      value: 230
+      objectReference: {fileID: 0}
+    - target: {fileID: 4442314067261040350, guid: 2a8f8c2456d78ee4cb265b8a5b8665fb, type: 3}
+      propertyPath: m_TileSpriteArray.Array.data[0].m_RefCount
+      value: 230
       objectReference: {fileID: 0}
     - target: {fileID: 5820920548213657517, guid: 2a8f8c2456d78ee4cb265b8a5b8665fb, type: 3}
       propertyPath: m_LocalPosition.x

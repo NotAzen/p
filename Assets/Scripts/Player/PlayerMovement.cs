@@ -100,7 +100,6 @@ public class PlayerMovement : MonoBehaviour
 
         // play dash particles
         dashParticlesInstance = Instantiate(dashParticles, transform.position, Quaternion.identity);
-        Destroy(dashParticlesInstance.gameObject, dashParticlesInstance.main.duration);
 
         // temporarily mark player as dashing (for afterimage effect)
         isDashing = true;

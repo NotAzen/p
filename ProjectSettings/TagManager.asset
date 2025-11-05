@@ -7,6 +7,8 @@ TagManager:
   - SpawnPoint
   - Rooms
   - AfterimagePool
+  - PlayerProjectile
+  - Enemy
   layers:
   - Default
   - TransparentFX
@@ -19,7 +21,7 @@ TagManager:
   - PlayerBullets
   - EnemyBullets
   - Enemy
-  - 
+  - Ground
   - 
   - 
   - 

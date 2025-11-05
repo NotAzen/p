@@ -94,7 +94,9 @@ public class RoomSpawner : MonoBehaviour
     {
         randomDoorIndex = Random.Range(0, roomType.Length);
         Instantiate(roomType[randomDoorIndex], transform.position, Quaternion.identity);
-        print("SPAWNED ROOM" + transform.position + roomType[randomDoorIndex].name);
+        
+        // room spawning debugging
+        Debug.Log("SPAWNED ROOM" + transform.position + roomType[randomDoorIndex].name);
     }
 
     // called when another collider enters this trigger
@@ -107,7 +109,9 @@ public class RoomSpawner : MonoBehaviour
         if (other.CompareTag("SpawnPoint"))
         {
             if (other.GetComponent<RoomSpawner>().spawned || GetComponent<RoomSpawner>().openingDirection > other.GetComponent<RoomSpawner>().openingDirection) {
+                // room spawning debugging
                 print("DESTOYED SPAWN: " + GetComponent<RoomSpawner>().openingDirection + transform.position);
+                
                 Destroy(gameObject);
             }
         }

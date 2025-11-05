@@ -60,7 +60,7 @@ public class ProjectileController : MonoBehaviour
         }
 
         // enemy layer is 10
-        if (collision.gameObject.layer == LayerMask.GetMask("Enemy"))
+        if (collision.gameObject.CompareTag("Enemy"))
         {
             // pop bullet on enemy hit
             removeBullet();

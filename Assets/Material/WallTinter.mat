@@ -20,7 +20,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: TilemapTinter
+  m_Name: WallTinter
   m_Shader: {fileID: -6465566751694194690, guid: 36034c37c7bc7a64a88d7f378f054b8d, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -63,5 +63,7 @@ Material:
     - _BaseColor: {r: 0.22169808, g: 0.8699456, b: 1, a: 1}
     - _PlayerPosition: {r: 0, g: 0, b: 0, a: 0}
     - _TintColor: {r: 1, g: 0.38207546, b: 0.38207546, a: 1}
+    - colorONE: {r: 0.53266287, g: 0.7008821, b: 0.8490566, a: 1}
+    - colorTWO: {r: 0.32547167, g: 1, b: 0.7808079, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
