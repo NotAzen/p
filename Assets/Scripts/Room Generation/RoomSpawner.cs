@@ -54,9 +54,6 @@ public class RoomSpawner : MonoBehaviour
 
         // spawn after delay
         Invoke("Spawn", 0.1f);
-
-        // increment rooms spawned count
-        templates.roomsSpawned++;
     }
 
     // spawn rooms based on opening direction
@@ -85,6 +82,10 @@ public class RoomSpawner : MonoBehaviour
                 break;
         }
 
+        // increment rooms spawned count
+        templates.roomsSpawned++;
+
+        // indicate that a room has been spawned
         spawned = true;
     }
 

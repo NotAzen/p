@@ -2,6 +2,7 @@ using UnityEngine;
 using TMPro;
 using Unity.VisualScripting;
 using System;
+using UnityEngine.UI;
 
 public class StatisticPercentage : MonoBehaviour
 {
@@ -18,11 +19,8 @@ public class StatisticPercentage : MonoBehaviour
         // variables needed for this class to even function properly LOL
         private TextMeshProUGUI UIText;
         private GameObject OverallMask;
-        private RectTransform BarPosition;
-        private RectTransform DifferenceBarPosition;
-
-        private RectTransform FullBarPosition;
-        private RectTransform EmptyBarPosition;
+        private Image Bar;
+        private Image DifferenceBar;
 
         private float displayStatistic;
         private float smoothingSpeed = 5f;
@@ -35,11 +33,8 @@ public class StatisticPercentage : MonoBehaviour
             // initialize variables
             UIText = uiObject.transform.Find("Text").GetComponent<TextMeshProUGUI>();
             OverallMask = uiObject.transform.Find("Overall Mask").gameObject;
-            BarPosition = OverallMask.transform.Find("Bar").GetComponent<RectTransform>();
-            DifferenceBarPosition = OverallMask.transform.Find("ChangeBar").GetComponent<RectTransform>();
-
-            FullBarPosition = OverallMask.transform.Find("100Percent").GetComponent<RectTransform>();
-            EmptyBarPosition = OverallMask.transform.Find("0Percent").GetComponent<RectTransform>();
+            Bar = OverallMask.transform.Find("Bar").GetComponent<Image>();
+            DifferenceBar = OverallMask.transform.Find("ChangeBar").GetComponent<Image>();
 
             displayStatistic = 0f;
         }
@@ -57,17 +52,16 @@ public class StatisticPercentage : MonoBehaviour
             string displayNum = Mathf.RoundToInt(displayStatistic).ToString();
             UIText.text = displayNum;
 
-            // bar position update
-            Vector3 newPosition = Vector3.Lerp(EmptyBarPosition.localPosition, FullBarPosition.localPosition, percentage);
-            BarPosition.localPosition = newPosition;
+            // bar update
+            Bar.fillAmount = percentage;
 
             // check if difference timer needs to be updated
             if (MathF.Abs(displayStatistic - statistic) > 2f) { UpdateDifferenceTimer(); }
 
-            // update difference bar position when timer is active
+            // update difference bar when timer is active
             if (Time.time > startDifferenceTime)
             {
-                DifferenceBarPosition.localPosition = Vector3.Lerp(DifferenceBarPosition.localPosition, newPosition, 10f * Time.deltaTime);
+                DifferenceBar.fillAmount = Mathf.Lerp(DifferenceBar.fillAmount, percentage, 10f * Time.deltaTime);
             }
         }
 
