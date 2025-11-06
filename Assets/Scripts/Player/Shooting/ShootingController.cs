@@ -1,3 +1,4 @@
+using Unity.Cinemachine;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -5,6 +6,7 @@ using UnityEngine.InputSystem;
 public class ShootingController : MonoBehaviour
 {
     // references to pointer and projectile prefab
+    [Header("References")]
     [SerializeField] public GameObject pointer;
     [SerializeField] private GameObject projectilePrefab;
 
@@ -13,6 +15,7 @@ public class ShootingController : MonoBehaviour
     private Vector3 pointerOffset;
 
     // projectile shooting variables
+    [Header("Shooting Properties")]
     private bool currentlyShooting = false;
     private float shootRequestTime;
     public float shootRequestBuffer = 0.2f;
@@ -20,9 +23,16 @@ public class ShootingController : MonoBehaviour
     public float shootCooldown = 0.5f;
 
     // bullet properties
+    [Header("Projectile Properties")]
     public float projectileSpeed = 10f;
     public float projectileDamage = 25f;
     public int projectileBounces = 3;
+
+    // cinemachine camera
+    [Header("Camera Offsetting")]
+    [SerializeField] private CinemachineFollow virtualCamera;
+    public float maxCameraDistance = 5f;
+    public float cameraSmoothing = 0.1f;
 
     // --------------------------------------------------------------------------------- //
 
@@ -69,9 +79,18 @@ public class ShootingController : MonoBehaviour
 
         // vector from player to mouse
         Vector3 shootingVector = mouseWorldPosition - transform.position;
+
+        // move camera offset towards mouse (done before shootingVector is normalized to more follow the mouse)
+        Vector3 cameraOffset = Vector3.Magnitude(shootingVector) > maxCameraDistance
+            ? Vector3.ClampMagnitude(shootingVector, maxCameraDistance) // if shooting vector is bigger than the maximum camera distance, clamp it
+            : shootingVector; // else just use the shooting vector
+        virtualCamera.FollowOffset = Vector3.Lerp(virtualCamera.FollowOffset, cameraOffset, cameraSmoothing * Time.deltaTime);
+        virtualCamera.FollowOffset.z = -10f; // ensure camera z-offset is correct
+
+        // normalize shooting vector and scale to pointer distance
         shootingVector.Normalize();
         pointerOffset = shootingVector * pointerDistance;
-        
+
         // set pointer position
         pointer.transform.position = transform.position + pointerOffset;
 

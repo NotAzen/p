@@ -26,7 +26,7 @@ public class RoomSpawner : MonoBehaviour
         // find the RoomTemplates object in the scene
         templates = GameObject.FindWithTag("Rooms").GetComponent<RoomTemplates>();
 
-        // skip spawning if limit reached
+        // if under the spawn limit, spawn normal rooms
         if (templates.roomsSpawned < templates.maxRooms)
         {
             roomClass = new List<GameObject[]>
@@ -36,8 +36,8 @@ public class RoomSpawner : MonoBehaviour
                 templates.leftRooms,
                 templates.rightRooms
             };
-            //Invoke("Spawn", 0.1f);
         }
+        // once the spawn limit is reached, only spawn cap rooms
         else
         {
             roomClass = new List<GameObject[]>
@@ -47,7 +47,6 @@ public class RoomSpawner : MonoBehaviour
                 templates.leftCaps,
                 templates.rightCaps
             };
-            //Invoke("SpawnCaps", 0.1f);
         }
 
         // spawn after delay
@@ -57,7 +56,14 @@ public class RoomSpawner : MonoBehaviour
     // spawn rooms based on opening direction
     void Spawn()
     {
+        // if room already spawned, exit
         if (spawned) return;
+
+        // increment rooms spawned count
+        templates.roomsSpawned++;
+
+        // indicate that a room has been spawned
+        spawned = true;
 
         switch (openingDirection)
         {
@@ -85,12 +91,6 @@ public class RoomSpawner : MonoBehaviour
                 Debug.LogError("Invalid opening direction: " + openingDirection);
                 break;
         }
-
-        // increment rooms spawned count
-        templates.roomsSpawned++;
-
-        // indicate that a room has been spawned
-        spawned = true;
     }
 
     // instantiate room based on opening direction
@@ -112,9 +112,18 @@ public class RoomSpawner : MonoBehaviour
         // 3. this spawn point has a higher opening direction value than the other
         if (other.CompareTag("SpawnPoint"))
         {
-            if (other.GetComponent<RoomSpawner>().spawned || GetComponent<RoomSpawner>().openingDirection > other.GetComponent<RoomSpawner>().openingDirection) {
+            // the other spawn point has already spawned a room
+            if (other.GetComponent<RoomSpawner>().spawned) {
                 // room spawning debugging
-                Debug.Log("DESTROYED SPAWN: " + GetComponent<RoomSpawner>().openingDirection + transform.position);
+                Debug.Log("DESTROYED SPAWN: " + GetComponent<RoomSpawner>().openingDirection + transform.position + " / REASON: ALREADY SPAWNED");
+                
+                Destroy(gameObject);
+            }
+            // this spawn point has a higher opening direction value than the other
+            else if (GetComponent<RoomSpawner>().openingDirection > other.GetComponent<RoomSpawner>().openingDirection)
+            {
+                // room spawning debugging
+                Debug.Log("DESTROYED SPAWN: " + GetComponent<RoomSpawner>().openingDirection + transform.position + " / REASON: HIGHER OPENING DIRECTION");
                 
                 Destroy(gameObject);
             }

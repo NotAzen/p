@@ -178,7 +178,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health: 100
   sightRange: 25
-  speed: 5
+  speed: 10
   damageParticles: {fileID: 3823838025450780157, guid: dd1d7ce442c7af34eb029b98eac1d098, type: 3}
   explosionParticles: {fileID: 5910342904697193370, guid: d8d7184cacc685d47a76a44dba6081bf, type: 3}
 --- !u!114 &3524376734500577334
@@ -193,5 +193,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f9c3f69ed6f410541ad143dd546b61bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damageParticles: {fileID: 0}
-  explosionParticles: {fileID: 0}
+  contactDamage: 25

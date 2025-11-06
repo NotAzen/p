@@ -10,6 +10,7 @@ public class BaseEnemyBehavior : MonoBehaviour
     // line of sight to player
     private GameObject player;
     private bool hasLineOfSight = false;
+    public float enemySlowing = 1f;
 
     // damage and explosion particles
     [SerializeField] private ParticleSystem damageParticles;
@@ -97,7 +98,7 @@ public class BaseEnemyBehavior : MonoBehaviour
             }
             else
             {
-                GetComponent<Rigidbody2D>().linearVelocity = Vector2.zero;
+                GetComponent<Rigidbody2D>().linearVelocity *= Mathf.Pow(enemySlowing, Time.deltaTime);
             }
 
                 // draw debug ray
