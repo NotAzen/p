@@ -26,10 +26,8 @@ public class RoomSpawner : MonoBehaviour
         // find the RoomTemplates object in the scene
         templates = GameObject.FindWithTag("Rooms").GetComponent<RoomTemplates>();
 
-        if (spawned) return;
-
         // skip spawning if limit reached
-        if (templates.roomsSpawned < 30)
+        if (templates.roomsSpawned < templates.maxRooms)
         {
             roomClass = new List<GameObject[]>
             {
@@ -59,8 +57,14 @@ public class RoomSpawner : MonoBehaviour
     // spawn rooms based on opening direction
     void Spawn()
     {
+        if (spawned) return;
+
         switch (openingDirection)
         {
+            // spawn starting room
+            case 0:
+                Instantiate(templates.startingRoom, transform.position, Quaternion.identity);
+                break;
             // spawn room with bottom door
             case 1:
                 SpawnRoom(roomClass[0]);
@@ -110,7 +114,7 @@ public class RoomSpawner : MonoBehaviour
         {
             if (other.GetComponent<RoomSpawner>().spawned || GetComponent<RoomSpawner>().openingDirection > other.GetComponent<RoomSpawner>().openingDirection) {
                 // room spawning debugging
-                print("DESTOYED SPAWN: " + GetComponent<RoomSpawner>().openingDirection + transform.position);
+                Debug.Log("DESTROYED SPAWN: " + GetComponent<RoomSpawner>().openingDirection + transform.position);
                 
                 Destroy(gameObject);
             }

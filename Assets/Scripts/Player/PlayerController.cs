@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerMovement : MonoBehaviour
+public class PlayerController : MonoBehaviour
 {
     // --------------------------------------------------------------------------------- //
     // PUBLIC VARIABLES
@@ -19,22 +19,28 @@ public class PlayerMovement : MonoBehaviour
     [Tooltip("Sudden dash forward. Larger numbers go farther.")]
     public float dashStrength = 10f;
     public float dashStamina = 10f;
-    public float staminaRegenCooldown = 1f;  // time after dashing before stamina starts regenerating
 
     [Header("Player Statistics")]
     public float maxHealth = 100f;
+    private float currentHealth;              // current health
+    public float healthRegenRate = 10f;       // health regenerated per second
+    public float healthRegenCooldown = 2f;    // time after taking damage before health starts regenerating
+    private float startHealthRegenTime;       // time when health regen starts
     public float maxStamina = 30f;
+    private float currentStamina;             // current stamina
     public float staminaRegenRate = 10f;      // stamina regenerated per second
+    public float staminaRegenCooldown = 1f;   // time after dashing before stamina starts regenerating
+    private float startStaminaRegenTime;      // time when stamina regen starts
+
+    [Header("Invincibility Frames")]
+    public float iframes = 0.5f;              // invincibility frames after taking damage
+    private float iframeStartTime;            // time when invincibility frames statr
 
     [Header("Other Objects")]
     [SerializeField] StatisticPercentage StatisticPercentage;
 
     // --------------------------------------------------------------------------------- //
     // PRIVATE VARIABLES
-
-    [Header("Current Player Statistics")]
-    private float currentHealth;        // current health
-    private float currentStamina;       // current stamina
 
     [Header("Particle Effects")]
     [SerializeField] private ParticleSystem dashParticles; // dash particle effect
@@ -50,7 +56,6 @@ public class PlayerMovement : MonoBehaviour
     private bool dashRequested;         // whether dash was requested
     private bool isDashing;             // whether player is currently dashing
     private float dashRequestTime;      // time when dash was requested
-    private float startRegenTime;       // time when stamina regen starts
 
     [Header("Afterimage Variables")]
     private float lastAfterimageTime;    // last time an afterimage was created
@@ -62,6 +67,12 @@ public class PlayerMovement : MonoBehaviour
         // initialize player stats
         currentHealth = maxHealth;
         currentStamina = maxStamina;
+    }
+
+    // collision handler
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        // if anything needs to be handled on collision, do it here
     }
 
     // movement input handler
@@ -90,10 +101,7 @@ public class PlayerMovement : MonoBehaviour
         additionalVelocity = dashDirection * dashStrength;
 
         // reduce stamina on dash
-        currentStamina -= dashStamina;
-
-        // set time to start regenerating stamina
-        startRegenTime = Time.time + staminaRegenCooldown;
+        ConsumeStamina(dashStamina);
 
         // reset dash request
         dashRequested = false;
@@ -126,13 +134,40 @@ public class PlayerMovement : MonoBehaviour
     }
 
     // statistics handlers
+    public void TakeDamage(float damage)
+    {
+        if (Time.time < iframeStartTime + iframes)
+        {
+            return; // still in invincibility frames
+        }
+
+        currentHealth -= damage; // reduce health
+        startHealthRegenTime = Time.time + healthRegenCooldown; // set time to start regenerating health
+        iframeStartTime = Time.time; // start invincibility frames
+    }
+
+    private void ConsumeStamina(float usedStamina)
+    {
+        currentStamina -= usedStamina; // reduce stamina
+        startStaminaRegenTime = Time.time + staminaRegenCooldown; // set time to start regenerating stamina
+    }
+
     private void RegenerateStamina()
     {
         // if enough time has passed since last dash, regenerate stamina
-        if (Time.time >= startRegenTime)
+        if (Time.time >= startStaminaRegenTime)
         {
             currentStamina += staminaRegenRate * Time.deltaTime;
             currentStamina = Mathf.Min(currentStamina, maxStamina); // clamp to max stamina
+        }
+    }
+    private void RegenerateHealth()
+    {
+        // if enough time has passed since last dash, regenerate stamina
+        if (Time.time >= startHealthRegenTime)
+        {
+            currentHealth += healthRegenRate * Time.deltaTime;
+            currentHealth = Mathf.Min(currentHealth, maxHealth); // clamp to max stamina
         }
     }
 
@@ -155,7 +190,8 @@ public class PlayerMovement : MonoBehaviour
             }
         }
 
-        // regenerate stamina each frame
+        // regenerate health and stamina each frame
+        RegenerateHealth();
         RegenerateStamina();
 
         // move the player each frame

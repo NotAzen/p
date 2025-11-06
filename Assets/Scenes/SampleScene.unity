@@ -619,7 +619,6 @@ GameObject:
   m_Component:
   - component: {fileID: 636052046}
   - component: {fileID: 636052049}
-  - component: {fileID: 636052048}
   - component: {fileID: 636052047}
   m_Layer: 0
   m_Name: Minimap Camera
@@ -687,14 +686,6 @@ MonoBehaviour:
     m_MipBias: 0
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
---- !u!81 &636052048
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 636052045}
-  m_Enabled: 1
 --- !u!20 &636052049
 Camera:
   m_ObjectHideFlags: 0
@@ -870,6 +861,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15503af004030084dae5eb2276d22ca8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  startingRoom: {fileID: 9038114515887886572, guid: d99e4151c6bbdc04d9ea46a08cee5462, type: 3}
   topRooms:
   - {fileID: 6809003372781452791, guid: 977a00e81e92727489fffae44bd1c394, type: 3}
   - {fileID: 37513127998000890, guid: e94288e9e5942cc42b5a7d044796d70f, type: 3}
@@ -910,6 +902,7 @@ MonoBehaviour:
   rightCaps:
   - {fileID: 5429348917577246124, guid: a27abe9e722d9e44a9550ce3bf86660c, type: 3}
   roomsSpawned: 0
+  maxRooms: 30
 --- !u!4 &873118466
 Transform:
   m_ObjectHideFlags: 0
@@ -1393,7 +1386,7 @@ GameObject:
   - component: {fileID: 1828055678}
   - component: {fileID: 1828055677}
   m_Layer: 0
-  m_Name: room spawner
+  m_Name: start spawner
   m_TagString: SpawnPoint
   m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -1499,7 +1492,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c7be1877669fe7f4681f99b0b6bf1269, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  openingDirection: 1
+  openingDirection: 0
 --- !u!1001 &2345910315990047115
 PrefabInstance:
   m_ObjectHideFlags: 0

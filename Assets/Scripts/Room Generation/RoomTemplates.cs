@@ -2,6 +2,10 @@ using UnityEngine;
 
 public class RoomTemplates : MonoBehaviour
 {
+    // reference to the starting room prefab
+    [Header("Starting Room")]
+    public GameObject startingRoom;
+
     // arrays of different room prefabs categorized by door openings
     [Header("Rooms")]
     public GameObject[] topRooms;
@@ -16,5 +20,7 @@ public class RoomTemplates : MonoBehaviour
     public GameObject[] leftCaps;
     public GameObject[] rightCaps;
 
+    // tracking the number of rooms spawned and the maximum allowed
     public int roomsSpawned = 0;
+    public int maxRooms = 30;
 }

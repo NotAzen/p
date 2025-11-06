@@ -24,6 +24,18 @@ public class BaseEnemyBehavior : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("Player");
     }
 
+    // enemy explosion whenever it dies
+    public void ExplodeEnemy()
+    {
+        // play explosion particles
+        explosionParticlesInstance = Instantiate(explosionParticles, transform.position, Quaternion.identity);
+        var explosionMain = explosionParticlesInstance.main;
+        explosionMain.startColor = GetComponent<SpriteRenderer>().color;
+
+        Destroy(gameObject);
+    }
+
+    // handle collisions
     private void OnCollisionEnter2D(Collision2D collision)
     {
         // player projectile layer is 8
@@ -60,17 +72,11 @@ public class BaseEnemyBehavior : MonoBehaviour
     {
         if (health <= 0f)
         {
-            // play explosion particles
-            explosionParticlesInstance = Instantiate(explosionParticles, transform.position, Quaternion.identity);
-            var explosionMain = explosionParticlesInstance.main;
-            explosionMain.startColor = GetComponent<SpriteRenderer>().color;
-
-            Destroy(gameObject);
+            ExplodeEnemy();
         }
-
-        print("what");
     }
 
+    // FixedUpdate is called at a fixed interval and is independent of frame rate
     private void FixedUpdate()
     {
         // check line of sight to player
