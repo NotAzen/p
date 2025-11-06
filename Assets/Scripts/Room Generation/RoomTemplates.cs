@@ -19,8 +19,4 @@ public class RoomTemplates : MonoBehaviour
     public GameObject[] bottomCaps;
     public GameObject[] leftCaps;
     public GameObject[] rightCaps;
-
-    // tracking the number of rooms spawned and the maximum allowed
-    public int roomsSpawned = 0;
-    public int maxRooms = 30;
 }

@@ -14,6 +14,7 @@ public class RoomSpawner : MonoBehaviour
 
     // reference to RoomTemplates
     private RoomTemplates templates;
+    private DungeonController dungeon;
     private int randomDoorIndex;
 
     private List<GameObject[]> roomClass;
@@ -24,10 +25,12 @@ public class RoomSpawner : MonoBehaviour
     void Start()
     {
         // find the RoomTemplates object in the scene
-        templates = GameObject.FindWithTag("Rooms").GetComponent<RoomTemplates>();
+        GameObject dungeonController = GameObject.FindWithTag("Dungeon");
+        templates = dungeonController.GetComponent<RoomTemplates>();
+        dungeon = dungeonController.GetComponent<DungeonController>();
 
-        // if under the spawn limit, spawn normal rooms
-        if (templates.roomsSpawned < templates.maxRooms)
+        // if under the spawn requirement, spawn normal rooms
+        if (dungeon.roomsSpawned < dungeon.minRooms)
         {
             roomClass = new List<GameObject[]>
             {
@@ -37,7 +40,7 @@ public class RoomSpawner : MonoBehaviour
                 templates.rightRooms
             };
         }
-        // once the spawn limit is reached, only spawn cap rooms
+        // once the spawn requirement is reached, only spawn cap rooms
         else
         {
             roomClass = new List<GameObject[]>
@@ -60,7 +63,7 @@ public class RoomSpawner : MonoBehaviour
         if (spawned) return;
 
         // increment rooms spawned count
-        templates.roomsSpawned++;
+        dungeon.roomsSpawned++;
 
         // indicate that a room has been spawned
         spawned = true;

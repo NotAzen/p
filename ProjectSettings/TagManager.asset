@@ -5,7 +5,7 @@ TagManager:
   serializedVersion: 3
   tags:
   - SpawnPoint
-  - Rooms
+  - Dungeon
   - AfterimagePool
   - PlayerProjectile
   - Enemy
