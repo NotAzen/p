@@ -18,10 +18,13 @@ public class KamikazeEnemy : MonoBehaviour
         if (other.gameObject.CompareTag("Player"))
         {
             // deal damage to player
-            other.gameObject.GetComponent<PlayerController>().TakeDamage(contactDamage);
+            bool damageConnected = other.gameObject.GetComponent<PlayerController>().TakeDamage(contactDamage);
 
             // explode after collision
-            baseBehavior.ExplodeEnemy();
+            if (damageConnected)
+            {
+                baseBehavior.ExplodeEnemy();
+            }
         }
     }
 }

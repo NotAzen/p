@@ -134,16 +134,18 @@ public class PlayerController : MonoBehaviour
     }
 
     // statistics handlers
-    public void TakeDamage(float damage)
+    public bool TakeDamage(float damage)
     {
         if (Time.time < iframeStartTime + iframes)
         {
-            return; // still in invincibility frames
+            return false; // still in invincibility frames
         }
 
         currentHealth -= damage; // reduce health
         startHealthRegenTime = Time.time + healthRegenCooldown; // set time to start regenerating health
         iframeStartTime = Time.time; // start invincibility frames
+
+        return true; // damage taken successfully
     }
 
     private void ConsumeStamina(float usedStamina)

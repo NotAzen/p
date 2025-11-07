@@ -9,6 +9,7 @@ TagManager:
   - AfterimagePool
   - PlayerProjectile
   - Enemy
+  - Winpad
   layers:
   - Default
   - TransparentFX

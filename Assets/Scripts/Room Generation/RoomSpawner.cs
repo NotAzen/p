@@ -32,24 +32,12 @@ public class RoomSpawner : MonoBehaviour
         // if under the spawn requirement, spawn normal rooms
         if (dungeon.roomsSpawned < dungeon.minRooms)
         {
-            roomClass = new List<GameObject[]>
-            {
-                templates.bottomRooms,
-                templates.topRooms,
-                templates.leftRooms,
-                templates.rightRooms
-            };
+            roomClass = templates.rooms;
         }
         // once the spawn requirement is reached, only spawn cap rooms
         else
         {
-            roomClass = new List<GameObject[]>
-            {
-                templates.bottomCaps,
-                templates.topCaps,
-                templates.leftCaps,
-                templates.rightCaps
-            };
+            roomClass = templates.caps;
         }
 
         // spawn after delay
@@ -64,6 +52,9 @@ public class RoomSpawner : MonoBehaviour
 
         // increment rooms spawned count
         dungeon.roomsSpawned++;
+
+        // room spawning debugging
+        Debug.Log(dungeon.roomsSpawned);
 
         // indicate that a room has been spawned
         spawned = true;
@@ -109,6 +100,9 @@ public class RoomSpawner : MonoBehaviour
     // called when another collider enters this trigger
     private void OnTriggerEnter2D(Collider2D other)
     {
+        // skip if already spawned
+        if (spawned) return;
+
         // force destroy spawn point if it:
         // 1. collides with another spawn point
         // 2. the other spawn point has already spawned a room
