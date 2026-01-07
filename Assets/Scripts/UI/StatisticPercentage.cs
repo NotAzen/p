@@ -14,7 +14,7 @@ public class StatisticPercentage : MonoBehaviour
     [SerializeField] GameObject StaminaStatsUI;
 
     // funny class thingy that manages all the UI stuff for a player statistic
-    public class StatisticBarHUDHandler
+    private class StatisticBarHUDHandler
     {
         // variables needed for this class to even function properly LOL
         private TextMeshProUGUI UIText;
@@ -73,8 +73,8 @@ public class StatisticPercentage : MonoBehaviour
     }
 
     // ui handlers for health and stamina
-    public StatisticBarHUDHandler healthHandler;
-    public StatisticBarHUDHandler staminaHandler;
+    private StatisticBarHUDHandler healthHandler;
+    private StatisticBarHUDHandler staminaHandler;
 
     // --------------------------------------------------------------------------------- //
     // PRIVATE VARIABLES

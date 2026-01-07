@@ -1761,28 +1761,12 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 963785620425176294, guid: 7cbc75d64f43dd347bd360ecb6205f6b, type: 3}
-      propertyPath: m_Layer
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2214138774454306242, guid: 7cbc75d64f43dd347bd360ecb6205f6b, type: 3}
-      propertyPath: dashParticles
-      value: 
-      objectReference: {fileID: 3042794193209241396, guid: b01a84715a3944c499da333d27ca2e7a, type: 3}
     - target: {fileID: 2214138774454306242, guid: 7cbc75d64f43dd347bd360ecb6205f6b, type: 3}
       propertyPath: StatisticPercentage
       value: 
       objectReference: {fileID: 55679597}
     - target: {fileID: 4668387443078741554, guid: 7cbc75d64f43dd347bd360ecb6205f6b, type: 3}
       propertyPath: m_Name
-      value: Player
-      objectReference: {fileID: 0}
-    - target: {fileID: 4668387443078741554, guid: 7cbc75d64f43dd347bd360ecb6205f6b, type: 3}
-      propertyPath: m_Layer
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 4668387443078741554, guid: 7cbc75d64f43dd347bd360ecb6205f6b, type: 3}
-      propertyPath: m_TagString
       value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 5376132757728998190, guid: 7cbc75d64f43dd347bd360ecb6205f6b, type: 3}
@@ -1825,30 +1809,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5911016198706887223, guid: 7cbc75d64f43dd347bd360ecb6205f6b, type: 3}
-      propertyPath: m_SortingLayer
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5911016198706887223, guid: 7cbc75d64f43dd347bd360ecb6205f6b, type: 3}
-      propertyPath: m_SortingLayerID
-      value: -1710260873
-      objectReference: {fileID: 0}
     - target: {fileID: 7698865362086247452, guid: 7cbc75d64f43dd347bd360ecb6205f6b, type: 3}
       propertyPath: virtualCamera
       value: 
       objectReference: {fileID: 645725281}
-    - target: {fileID: 7698865362086247452, guid: 7cbc75d64f43dd347bd360ecb6205f6b, type: 3}
-      propertyPath: cameraSmoothing
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 7698865362086247452, guid: 7cbc75d64f43dd347bd360ecb6205f6b, type: 3}
-      propertyPath: projectileSpeed
-      value: 50
-      objectReference: {fileID: 0}
-    - target: {fileID: 7698865362086247452, guid: 7cbc75d64f43dd347bd360ecb6205f6b, type: 3}
-      propertyPath: maxCameraDistance
-      value: 3
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

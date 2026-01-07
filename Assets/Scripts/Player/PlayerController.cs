@@ -1,8 +1,29 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
+    // --------------------------------------------------------------------------------- //
+    // CUSTOM CLASSES
+
+    [Serializable]
+    public class Statistic
+    {
+        public float currentValue;
+        public float maxValue;
+        public float regenerationRate;
+        public float regenerationDelay;
+        private float lastUsedTime;
+
+        // constructor (initialization)
+        public Statistic(float max)
+        {
+            maxValue = max;
+            currentValue = maxValue;
+        }
+    }
+
     // --------------------------------------------------------------------------------- //
     // PUBLIC VARIABLES
 

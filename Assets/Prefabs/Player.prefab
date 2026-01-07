@@ -102,9 +102,9 @@ GameObject:
   - component: {fileID: 3417738771198669793}
   - component: {fileID: 2214138774454306242}
   - component: {fileID: 7698865362086247452}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -166,8 +166,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -1710260873
+  m_SortingLayer: 1
   m_SortingOrder: 0
   m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -290,12 +290,15 @@ MonoBehaviour:
   frictionCoefficient: 0.0001
   dashStrength: 60
   dashStamina: 10
-  staminaRegenCooldown: 1
   maxHealth: 100
+  healthRegenRate: 10
+  healthRegenCooldown: 2
   maxStamina: 30
   staminaRegenRate: 10
+  staminaRegenCooldown: 1
+  iframes: 0.5
   StatisticPercentage: {fileID: 0}
-  dashParticles: {fileID: 0}
+  dashParticles: {fileID: 3042794193209241396, guid: b01a84715a3944c499da333d27ca2e7a, type: 3}
   afterimageTime: 0.05
 --- !u!114 &7698865362086247452
 MonoBehaviour:
@@ -314,6 +317,9 @@ MonoBehaviour:
   pointerDistance: 1
   shootRequestBuffer: 0.2
   shootCooldown: 0.5
-  projectileSpeed: 10
+  projectileSpeed: 50
   projectileDamage: 25
   projectileBounces: 3
+  virtualCamera: {fileID: 0}
+  maxCameraDistance: 3
+  cameraSmoothing: 2
