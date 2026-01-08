@@ -1761,10 +1761,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 2214138774454306242, guid: 7cbc75d64f43dd347bd360ecb6205f6b, type: 3}
-      propertyPath: StatisticPercentage
-      value: 
-      objectReference: {fileID: 55679597}
     - target: {fileID: 4668387443078741554, guid: 7cbc75d64f43dd347bd360ecb6205f6b, type: 3}
       propertyPath: m_Name
       value: Player

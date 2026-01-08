@@ -2,28 +2,58 @@ using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerController : MonoBehaviour
+// --------------------------------------------------------------------------------- //
+// CUSTOM CLASSES
+
+[Serializable]
+public class Statistic
 {
-    // --------------------------------------------------------------------------------- //
-    // CUSTOM CLASSES
+    private float _currentValue;
+    public float maxValue;
+    [SerializeField] private float regenerationRate;
+    [SerializeField] private float regenerationDelay;
+    private float lastUsedTime;
 
-    [Serializable]
-    public class Statistic
+    // constructor (initialization)
+    public Statistic()
     {
-        public float currentValue;
-        public float maxValue;
-        public float regenerationRate;
-        public float regenerationDelay;
-        private float lastUsedTime;
-
-        // constructor (initialization)
-        public Statistic(float max)
-        {
-            maxValue = max;
-            currentValue = maxValue;
-        }
+        // idk set default values
+        _currentValue = 100f;
+        maxValue = 100f;
     }
 
+    // property to get current value
+    public float CurrentValue
+    {
+        get { return _currentValue; }
+    }
+
+    // method for checking if statistic has enough value
+    public bool Has(float amount)
+    {
+        return _currentValue >= amount;
+    }
+
+    // method to consume the statistic (like stamina)
+    public void Consume(float amount)
+    {
+        _currentValue -= amount;
+        lastUsedTime = Time.time;
+    }
+
+    // method to regenerate the statistic over time
+    public void Regenerate()
+    {
+        if (Time.time >= lastUsedTime + regenerationDelay)
+        {
+            _currentValue += regenerationRate * Time.deltaTime;
+            _currentValue = Mathf.Min(_currentValue, maxValue); // clamp to max value
+        }
+    }
+}
+
+public class PlayerController : MonoBehaviour
+{
     // --------------------------------------------------------------------------------- //
     // PUBLIC VARIABLES
 
@@ -42,23 +72,22 @@ public class PlayerController : MonoBehaviour
     public float dashStamina = 10f;
 
     [Header("Player Statistics")]
-    public float maxHealth = 100f;
-    private float currentHealth;              // current health
-    public float healthRegenRate = 10f;       // health regenerated per second
-    public float healthRegenCooldown = 2f;    // time after taking damage before health starts regenerating
-    private float startHealthRegenTime;       // time when health regen starts
-    public float maxStamina = 30f;
-    private float currentStamina;             // current stamina
-    public float staminaRegenRate = 10f;      // stamina regenerated per second
-    public float staminaRegenCooldown = 1f;   // time after dashing before stamina starts regenerating
-    private float startStaminaRegenTime;      // time when stamina regen starts
+    public Statistic health = new();
+    public Statistic stamina = new();
+    //public float maxHealth = 100f;
+    //private float currentHealth;              // current health
+    //public float healthRegenRate = 10f;       // health regenerated per second
+    //public float healthRegenCooldown = 2f;    // time after taking damage before health starts regenerating
+    //private float startHealthRegenTime;       // time when health regen starts
+    //public float maxStamina = 30f;
+    //private float currentStamina;             // current stamina
+    //public float staminaRegenRate = 10f;      // stamina regenerated per second
+    //public float staminaRegenCooldown = 1f;   // time after dashing before stamina starts regenerating
+    //private float startStaminaRegenTime;      // time when stamina regen starts
 
     [Header("Invincibility Frames")]
     public float iframes = 0.5f;              // invincibility frames after taking damage
     private float iframeStartTime;            // time when invincibility frames statr
-
-    [Header("Other Objects")]
-    [SerializeField] StatisticPercentage StatisticPercentage;
 
     // --------------------------------------------------------------------------------- //
     // PRIVATE VARIABLES
@@ -85,9 +114,9 @@ public class PlayerController : MonoBehaviour
     // --------------------------------------------------------------------------------- //
     void Start()
     {
-        // initialize player stats
-        currentHealth = maxHealth;
-        currentStamina = maxStamina;
+        //// initialize player stats
+        //currentHealth = maxHealth;
+        //currentStamina = maxStamina;
     }
 
     // collision handler
@@ -122,7 +151,7 @@ public class PlayerController : MonoBehaviour
         additionalVelocity = dashDirection * dashStrength;
 
         // reduce stamina on dash
-        ConsumeStamina(dashStamina);
+        stamina.Consume(dashStamina);
 
         // reset dash request
         dashRequested = false;
@@ -154,51 +183,56 @@ public class PlayerController : MonoBehaviour
         rb.linearVelocity = inputVelocity + additionalVelocity;
     }
 
+    // invincibility frame handler
+    public bool IsInvincible()
+    {
+        return Time.time < iframeStartTime + iframes;
+    }
+
     // statistics handlers
     public bool TakeDamage(float damage)
     {
-        if (Time.time < iframeStartTime + iframes)
+        if (IsInvincible())
         {
             return false; // still in invincibility frames
         }
 
-        currentHealth -= damage; // reduce health
-        startHealthRegenTime = Time.time + healthRegenCooldown; // set time to start regenerating health
+        health.Consume(damage); // reduce health
         iframeStartTime = Time.time; // start invincibility frames
 
         return true; // damage taken successfully
     }
 
-    private void ConsumeStamina(float usedStamina)
-    {
-        currentStamina -= usedStamina; // reduce stamina
-        startStaminaRegenTime = Time.time + staminaRegenCooldown; // set time to start regenerating stamina
-    }
+    //private void ConsumeStamina(float usedStamina)
+    //{
+    //    currentStamina -= usedStamina; // reduce stamina
+    //    startStaminaRegenTime = Time.time + staminaRegenCooldown; // set time to start regenerating stamina
+    //}
 
-    private void RegenerateStamina()
-    {
-        // if enough time has passed since last dash, regenerate stamina
-        if (Time.time >= startStaminaRegenTime)
-        {
-            currentStamina += staminaRegenRate * Time.deltaTime;
-            currentStamina = Mathf.Min(currentStamina, maxStamina); // clamp to max stamina
-        }
-    }
-    private void RegenerateHealth()
-    {
-        // if enough time has passed since last dash, regenerate stamina
-        if (Time.time >= startHealthRegenTime)
-        {
-            currentHealth += healthRegenRate * Time.deltaTime;
-            currentHealth = Mathf.Min(currentHealth, maxHealth); // clamp to max stamina
-        }
-    }
+    //private void RegenerateStamina()
+    //{
+    //    // if enough time has passed since last dash, regenerate stamina
+    //    if (Time.time >= startStaminaRegenTime)
+    //    {
+    //        currentStamina += staminaRegenRate * Time.deltaTime;
+    //        currentStamina = Mathf.Min(currentStamina, maxStamina); // clamp to max stamina
+    //    }
+    //}
+    //private void RegenerateHealth()
+    //{
+    //    // if enough time has passed since last dash, regenerate stamina
+    //    if (Time.time >= startHealthRegenTime)
+    //    {
+    //        currentHealth += healthRegenRate * Time.deltaTime;
+    //        currentHealth = Mathf.Min(currentHealth, maxHealth); // clamp to max stamina
+    //    }
+    //}
 
     // Update is called once per frame
     void Update()
     {
         // whenever dash is requested, perform dash
-        if (dashRequested && dashRequestTime > Time.time && currentStamina >= dashStamina && moveInput != Vector2.zero) { Dash(); }
+        if (dashRequested && dashRequestTime > Time.time && stamina.Has(dashStamina) && moveInput != Vector2.zero) { Dash(); }
         if (isDashing) {
             // dash afterimage
             if (Time.time > lastAfterimageTime + afterimageTime) {
@@ -214,14 +248,14 @@ public class PlayerController : MonoBehaviour
         }
 
         // regenerate health and stamina each frame
-        RegenerateHealth();
-        RegenerateStamina();
+        health.Regenerate();
+        stamina.Regenerate();
 
         // move the player each frame
         MovePlayer();
 
-        // communicate with other systems (like UI) here if needed
-        StatisticPercentage.healthHandler.UpdateDisplay(currentHealth, maxHealth);
-        StatisticPercentage.staminaHandler.UpdateDisplay(currentStamina, maxStamina);
+        //// communicate with other systems (like UI) here if needed
+        //StatisticPercentage.healthHandler.UpdateDisplay(currentHealth, maxHealth);
+        //StatisticPercentage.staminaHandler.UpdateDisplay(currentStamina, maxStamina);
     }
 }

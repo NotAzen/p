@@ -42,10 +42,14 @@ public class StatisticPercentage : MonoBehaviour
         // ----------------------------------------------------------------------------------- //
         // PUBLIC METHODS
 
-        public void UpdateDisplay(float statistic, float statisticMax)
+        public void UpdateDisplay(Statistic statistic)
         {
+            // grab current and max statistic values
+            float statisticCurrent = statistic.CurrentValue;
+            float statisticMax = statistic.maxValue;
+
             // calculate smoothed display value and percentage
-            displayStatistic = Mathf.Lerp(displayStatistic, statistic, smoothingSpeed * Time.deltaTime);
+            displayStatistic = Mathf.Lerp(displayStatistic, statisticCurrent, smoothingSpeed * Time.deltaTime);
             float percentage = displayStatistic / statisticMax;
 
             // number displayed
@@ -56,7 +60,7 @@ public class StatisticPercentage : MonoBehaviour
             Bar.fillAmount = percentage;
 
             // check if difference timer needs to be updated
-            if (MathF.Abs(displayStatistic - statistic) > 2f) { UpdateDifferenceTimer(); }
+            if (MathF.Abs(displayStatistic - statisticCurrent) > 2f) { UpdateDifferenceTimer(); }
 
             // update difference bar when timer is active
             if (Time.time > startDifferenceTime)
@@ -79,18 +83,23 @@ public class StatisticPercentage : MonoBehaviour
     // --------------------------------------------------------------------------------- //
     // PRIVATE VARIABLES
 
+    private GameObject player;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         healthHandler = new StatisticBarHUDHandler(HPStatsUI);
         staminaHandler = new StatisticBarHUDHandler(StaminaStatsUI);
+
+        player = GameObject.FindGameObjectWithTag("Player");
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        PlayerController playerController = player.GetComponent<PlayerController>();
+        healthHandler.UpdateDisplay(playerController.health);
+        staminaHandler.UpdateDisplay(playerController.stamina);
     }
 
 }
