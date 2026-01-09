@@ -50,7 +50,7 @@ public class ShootingController : MonoBehaviour
     // get mouse position relative to world
     private Vector3 GrabMousePosition()
     {
-        Vector3 mouseScreenPosition = Input.mousePosition;
+        Vector3 mouseScreenPosition = Mouse.current.position.ReadValue();
         Vector3 mouseWorldPosition = Camera.main.ScreenToWorldPoint(mouseScreenPosition);
         mouseWorldPosition.z = 0; // ensure the z-coordinate is 0
 
