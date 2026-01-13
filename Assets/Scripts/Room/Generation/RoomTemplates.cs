@@ -34,10 +34,6 @@ public class RoomTemplates : MonoBehaviour
         private set { _caps = value; }
     }
 
-    // array of wall prefabs for filling empty spaces
-    [Header("Walls")]
-    public GameObject[] walls;
-
     // win room prefabs
     [Header("Win Rooms")]
     public GameObject[] winRoomsTop;
