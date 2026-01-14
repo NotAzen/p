@@ -38,6 +38,15 @@ public class RoomSpawner : MonoBehaviour
         else
         {
             roomClass = templates.caps;
+
+            // if the win room hasn't been spawned yet, set roomClass to winRooms
+            if (!RoomTemplates.winSpawned)
+            {
+                RoomTemplates.winSpawned = true;
+
+                roomClass = templates.winRooms;
+                RoomTemplates.winSpawner = gameObject;
+            }
         }
 
         // spawn after delay

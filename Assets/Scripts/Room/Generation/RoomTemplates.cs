@@ -47,6 +47,9 @@ public class RoomTemplates : MonoBehaviour
         private set { _winRooms = value; }
     }
 
+    public static bool winSpawned = false;
+    public static GameObject winSpawner;
+
     private void Start()
     {
         // initialize room categories

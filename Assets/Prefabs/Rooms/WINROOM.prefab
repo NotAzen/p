@@ -4929,6 +4929,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 346425838474542963, guid: 2a8f8c2456d78ee4cb265b8a5b8665fb, type: 3}
+      propertyPath: m_Color.b
+      value: 0.63068604
+      objectReference: {fileID: 0}
+    - target: {fileID: 346425838474542963, guid: 2a8f8c2456d78ee4cb265b8a5b8665fb, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 346425838474542963, guid: 2a8f8c2456d78ee4cb265b8a5b8665fb, type: 3}
+      propertyPath: m_Color.r
+      value: 0.4481132
+      objectReference: {fileID: 0}
     - target: {fileID: 2472863468175614389, guid: 2a8f8c2456d78ee4cb265b8a5b8665fb, type: 3}
       propertyPath: m_Tiles.Array.size
       value: 92
