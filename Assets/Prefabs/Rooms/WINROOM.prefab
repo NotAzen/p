@@ -4931,15 +4931,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 346425838474542963, guid: 2a8f8c2456d78ee4cb265b8a5b8665fb, type: 3}
       propertyPath: m_Color.b
-      value: 0.63068604
+      value: 0.42697766
       objectReference: {fileID: 0}
     - target: {fileID: 346425838474542963, guid: 2a8f8c2456d78ee4cb265b8a5b8665fb, type: 3}
       propertyPath: m_Color.g
-      value: 1
+      value: 0.8679245
       objectReference: {fileID: 0}
     - target: {fileID: 346425838474542963, guid: 2a8f8c2456d78ee4cb265b8a5b8665fb, type: 3}
       propertyPath: m_Color.r
-      value: 0.4481132
+      value: 0.13510147
       objectReference: {fileID: 0}
     - target: {fileID: 2472863468175614389, guid: 2a8f8c2456d78ee4cb265b8a5b8665fb, type: 3}
       propertyPath: m_Tiles.Array.size
