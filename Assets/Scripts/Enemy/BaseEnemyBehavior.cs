@@ -80,9 +80,12 @@ public class BaseEnemyBehavior : MonoBehaviour
     // FixedUpdate is called at a fixed interval and is independent of frame rate
     private void FixedUpdate()
     {
+        // define vector to player
+        Vector3 toPlayerVector = player.transform.position - transform.position;
+
         // check line of sight to player
         RaycastHit2D ray = Physics2D.Raycast(transform.position,
-                            player.transform.position - transform.position,
+                            toPlayerVector,
                             sightRange,
                             LayerMask.GetMask("Environment", "Player"));
 
@@ -94,17 +97,17 @@ public class BaseEnemyBehavior : MonoBehaviour
             // move towards player if in line of sight
             if (hasLineOfSight)
             {
-                GetComponent<Rigidbody2D>().linearVelocity = (player.transform.position - transform.position).normalized * speed;
+                GetComponent<Rigidbody2D>().linearVelocity = toPlayerVector.normalized * speed;
             }
             else
             {
                 GetComponent<Rigidbody2D>().linearVelocity *= Mathf.Pow(enemySlowing, Time.deltaTime);
             }
-
-                // draw debug ray
-                Debug.DrawRay(transform.position,
-                              player.transform.position - transform.position,
-                              hasLineOfSight ? Color.green : Color.red);
+            
+            // draw debug ray
+            Debug.DrawRay(transform.position,
+                            toPlayerVector,
+                            hasLineOfSight ? Color.green : Color.red);
         }
     }
 }

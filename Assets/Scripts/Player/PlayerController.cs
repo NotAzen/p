@@ -2,63 +2,10 @@ using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-// --------------------------------------------------------------------------------- //
-// CUSTOM CLASSES
-
-[Serializable]
-public class Statistic
-{
-    private float _currentValue;
-    public float maxValue;
-    [SerializeField] private float regenerationRate;
-    [SerializeField] private float regenerationDelay;
-    private float lastUsedTime;
-
-    // constructor (initialization)
-    public Statistic()
-    {
-        // idk set default values
-        _currentValue = 100f;
-        maxValue = 100f;
-    }
-
-    // property to get current value
-    public float CurrentValue
-    {
-        get { return _currentValue; }
-    }
-
-    // method for checking if statistic has enough value
-    public bool Has(float amount)
-    {
-        return _currentValue >= amount;
-    }
-
-    // method to consume the statistic (like stamina)
-    public void Consume(float amount)
-    {
-        _currentValue -= amount;
-        lastUsedTime = Time.time;
-    }
-
-    // method to regenerate the statistic over time
-    public void Regenerate()
-    {
-        if (Time.time >= lastUsedTime + regenerationDelay)
-        {
-            _currentValue += regenerationRate * Time.deltaTime;
-            _currentValue = Mathf.Min(_currentValue, maxValue); // clamp to max value
-        }
-    }
-}
-
 public class PlayerController : MonoBehaviour
 {
-    // --------------------------------------------------------------------------------- //
-    // PUBLIC VARIABLES
-
     [Header("References")]
-    public Rigidbody2D rb;
+    private Rigidbody2D rb;
 
     [Header("Movement Statistics")] // headers separate sections in the inspector
     public float acceleration = 1f;
@@ -71,26 +18,9 @@ public class PlayerController : MonoBehaviour
     public float dashStrength = 10f;
     public float dashStamina = 10f;
 
-    [Header("Player Statistics")]
-    public Statistic health = new();
-    public Statistic stamina = new();
-    //public float maxHealth = 100f;
-    //private float currentHealth;              // current health
-    //public float healthRegenRate = 10f;       // health regenerated per second
-    //public float healthRegenCooldown = 2f;    // time after taking damage before health starts regenerating
-    //private float startHealthRegenTime;       // time when health regen starts
-    //public float maxStamina = 30f;
-    //private float currentStamina;             // current stamina
-    //public float staminaRegenRate = 10f;      // stamina regenerated per second
-    //public float staminaRegenCooldown = 1f;   // time after dashing before stamina starts regenerating
-    //private float startStaminaRegenTime;      // time when stamina regen starts
-
-    [Header("Invincibility Frames")]
-    public float iframes = 0.5f;              // invincibility frames after taking damage
-    private float iframeStartTime;            // time when invincibility frames statr
-
-    // --------------------------------------------------------------------------------- //
-    // PRIVATE VARIABLES
+    //[Header("Invincibility Frames")]
+    //public float iframes = 0.5f;              // invincibility frames after taking damage
+    //private float iframeStartTime;            // time when invincibility frames started
 
     [Header("Particle Effects")]
     [SerializeField] private ParticleSystem dashParticles; // dash particle effect
@@ -103,6 +33,7 @@ public class PlayerController : MonoBehaviour
     private Vector2 additionalVelocity; // velocity vector added by other means (like dashing)
 
     [Header("Dash Variables")]
+    private Cooldown dashCooldown = new(0.1f); // dash cooldown
     private bool dashRequested;         // whether dash was requested
     private bool isDashing;             // whether player is currently dashing
     private float dashRequestTime;      // time when dash was requested
@@ -111,12 +42,19 @@ public class PlayerController : MonoBehaviour
     private float lastAfterimageTime;    // last time an afterimage was created
     [SerializeField] public float afterimageTime = 0.05f; // time between afterimages
 
+    [Header("Player Statistics")]
+    public PlayerStatistics playerStats;
+
     // --------------------------------------------------------------------------------- //
+    // 
+
     void Start()
     {
-        //// initialize player stats
-        //currentHealth = maxHealth;
-        //currentStamina = maxStamina;
+        // grab rigidbody reference if not set
+        rb = GetComponent<Rigidbody2D>();
+
+        // initialize statistics
+        playerStats = GetComponent<PlayerStatistics>();
     }
 
     // collision handler
@@ -139,7 +77,7 @@ public class PlayerController : MonoBehaviour
         if (value.Get<float>() > 0.5f)
         {
             dashRequested = true;
-            dashRequestTime = Time.time + 0.1f;
+            dashCooldown.Trigger();
         }
     }
     
@@ -151,7 +89,7 @@ public class PlayerController : MonoBehaviour
         additionalVelocity = dashDirection * dashStrength;
 
         // reduce stamina on dash
-        stamina.Consume(dashStamina);
+        playerStats.stamina.Consume(dashStamina);
 
         // reset dash request
         dashRequested = false;
@@ -183,56 +121,29 @@ public class PlayerController : MonoBehaviour
         rb.linearVelocity = inputVelocity + additionalVelocity;
     }
 
-    // invincibility frame handler
-    public bool IsInvincible()
-    {
-        return Time.time < iframeStartTime + iframes;
-    }
-
     // statistics handlers
     public bool TakeDamage(float damage)
     {
-        if (IsInvincible())
+        if (playerStats.iframes.IsReady())
         {
             return false; // still in invincibility frames
         }
 
-        health.Consume(damage); // reduce health
-        iframeStartTime = Time.time; // start invincibility frames
+        playerStats.health.Consume(damage); // reduce health
+        playerStats.iframes.Trigger(); // start invincibility frames
 
         return true; // damage taken successfully
     }
-
-    //private void ConsumeStamina(float usedStamina)
-    //{
-    //    currentStamina -= usedStamina; // reduce stamina
-    //    startStaminaRegenTime = Time.time + staminaRegenCooldown; // set time to start regenerating stamina
-    //}
-
-    //private void RegenerateStamina()
-    //{
-    //    // if enough time has passed since last dash, regenerate stamina
-    //    if (Time.time >= startStaminaRegenTime)
-    //    {
-    //        currentStamina += staminaRegenRate * Time.deltaTime;
-    //        currentStamina = Mathf.Min(currentStamina, maxStamina); // clamp to max stamina
-    //    }
-    //}
-    //private void RegenerateHealth()
-    //{
-    //    // if enough time has passed since last dash, regenerate stamina
-    //    if (Time.time >= startHealthRegenTime)
-    //    {
-    //        currentHealth += healthRegenRate * Time.deltaTime;
-    //        currentHealth = Mathf.Min(currentHealth, maxHealth); // clamp to max stamina
-    //    }
-    //}
 
     // Update is called once per frame
     void Update()
     {
         // whenever dash is requested, perform dash
-        if (dashRequested && dashRequestTime > Time.time && stamina.Has(dashStamina) && moveInput != Vector2.zero) { Dash(); }
+        if (dashRequested && dashCooldown.IsReady() && playerStats.stamina.Has(dashStamina) && moveInput != Vector2.zero)
+        {
+            Dash();
+        }
+
         if (isDashing) {
             // dash afterimage
             if (Time.time > lastAfterimageTime + afterimageTime) {
@@ -247,15 +158,7 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        // regenerate health and stamina each frame
-        health.Regenerate();
-        stamina.Regenerate();
-
         // move the player each frame
         MovePlayer();
-
-        //// communicate with other systems (like UI) here if needed
-        //StatisticPercentage.healthHandler.UpdateDisplay(currentHealth, maxHealth);
-        //StatisticPercentage.staminaHandler.UpdateDisplay(currentStamina, maxStamina);
     }
 }

@@ -102,6 +102,7 @@ GameObject:
   - component: {fileID: 3417738771198669793}
   - component: {fileID: 2214138774454306242}
   - component: {fileID: 7698865362086247452}
+  - component: {fileID: 2916896113561122237}
   m_Layer: 7
   m_Name: Player
   m_TagString: Player
@@ -286,7 +287,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29f68709145c24f4e99f16acfdd1d5a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rb: {fileID: 2696892607934709833}
   acceleration: 150
   frictionCoefficient: 0.0001
   dashStrength: 60
@@ -325,6 +325,26 @@ MonoBehaviour:
   virtualCamera: {fileID: 0}
   maxCameraDistance: 3
   cameraSmoothing: 2
+--- !u!114 &2916896113561122237
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4668387443078741554}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ccfdcc58275bd547a2e5fd9b5e620c0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health:
+    maxValue: 100
+    regenerationRate: 10
+    regenerationDelay: 2
+  stamina:
+    maxValue: 30
+    regenerationRate: 10
+    regenerationDelay: 1
 --- !u!1 &5045886218572615934
 GameObject:
   m_ObjectHideFlags: 0

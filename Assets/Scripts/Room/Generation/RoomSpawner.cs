@@ -38,15 +38,6 @@ public class RoomSpawner : MonoBehaviour
         else
         {
             roomClass = templates.caps;
-
-            // if the win room hasn't been spawned yet, set roomClass to winRooms
-            if (!RoomTemplates.winSpawned)
-            {
-                RoomTemplates.winSpawned = true;
-
-                roomClass = templates.winRooms;
-                RoomTemplates.winSpawner = gameObject;
-            }
         }
 
         // spawn after delay
@@ -58,6 +49,16 @@ public class RoomSpawner : MonoBehaviour
     {
         // if room already spawned, exit
         if (spawned) return;
+
+        // by this point, this spawn point is spawning a room, so
+        // if win room has not been spawned yet and this is a cap room spawn point
+        if (!RoomTemplates.winSpawned && roomClass == templates.caps)
+        {
+            RoomTemplates.winSpawned = true;
+
+            roomClass = templates.winRooms;
+            Debug.Log("WIN ROOM SPAWNER SET AT: " + transform.position);
+        }
 
         // increment rooms spawned count
         dungeon.roomsSpawned++;
