@@ -97,7 +97,7 @@ public class StatisticPercentage : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        PlayerController playerController = player.GetComponent<PlayerController>();
+        PlayerStatistics playerController = player.GetComponent<PlayerStatistics>();
         healthHandler.UpdateDisplay(playerController.health);
         staminaHandler.UpdateDisplay(playerController.stamina);
     }
