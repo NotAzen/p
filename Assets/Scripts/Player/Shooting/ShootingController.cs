@@ -37,7 +37,7 @@ public class ShootingController : MonoBehaviour
     // --------------------------------------------------------------------------------- //
 
     // dash input handler
-    public void OnShoot(InputValue value)
+    public void OnPrimary(InputValue value)
     {
         // ummm idk apparently >0.5f for buttons detects presses so like yeah
         if (value.Get<float>() > 0.5f)

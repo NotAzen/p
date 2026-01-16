@@ -33,14 +33,13 @@ public class PlayerController : MonoBehaviour
     private Vector2 additionalVelocity; // velocity vector added by other means (like dashing)
 
     [Header("Dash Variables")]
-    private Cooldown dashCooldown = new(0.1f); // dash cooldown
     private bool dashRequested;         // whether dash was requested
     private bool isDashing;             // whether player is currently dashing
-    private float dashRequestTime;      // time when dash was requested
 
     [Header("Afterimage Variables")]
-    private float lastAfterimageTime;    // last time an afterimage was created
-    [SerializeField] public float afterimageTime = 0.05f; // time between afterimages
+    [SerializeField] private Cooldown afterimageCooldown = new(0.05f);
+    //private float lastAfterimageTime;    // last time an afterimage was created
+    //[SerializeField] public float afterimageTime = 0.05f; // time between afterimages
 
     [Header("Player Statistics")]
     public PlayerStatistics playerStats;
@@ -77,40 +76,45 @@ public class PlayerController : MonoBehaviour
         if (value.Get<float>() > 0.5f)
         {
             dashRequested = true;
-            dashCooldown.Trigger();
         }
     }
     
     // movement handlers
-    private void Dash()
+    private void AttemptDash()
     {
+        if (!dashRequested) {
+            return; // already dashing
+        }
+
+        if (!playerStats.stamina.Has(dashStamina)) {
+            return;
+        }
+
+        if (moveInput == Vector2.zero)
+        {
+            return;
+        }
+
         // add a sudden burst of velocity in the direction of movement input
         Vector2 dashDirection = moveInput.normalized;
         additionalVelocity = dashDirection * dashStrength;
 
-        // reduce stamina on dash
         playerStats.stamina.Consume(dashStamina);
 
-        // reset dash request
         dashRequested = false;
-
-        // play dash particles
-        dashParticlesInstance = Instantiate(dashParticles, transform.position, Quaternion.identity);
-
-        // temporarily mark player as dashing (for afterimage effect)
         isDashing = true;
 
-        // create afterimage effect i hope
+        // vfx
+        dashParticlesInstance = Instantiate(dashParticles, transform.position, Quaternion.identity);
         PlayerAfterimagePool.Instance.GetFromPool();
 
+        // ignore collision with enemies during dash
+        BaseEnemyBehavior.DisableCollision();
     }
 
     private void MovePlayer()
     {
-        // calculate player acceleration based on input
         inputAcceleration = moveInput * acceleration;
-
-        // update player velocity based on acceleration
         inputVelocity += inputAcceleration * Time.deltaTime;
 
         // apply some friction to slow down over time
@@ -124,7 +128,7 @@ public class PlayerController : MonoBehaviour
     // statistics handlers
     public bool TakeDamage(float damage)
     {
-        if (playerStats.iframes.IsReady())
+        if (!playerStats.iframes.IsReady())
         {
             return false; // still in invincibility frames
         }
@@ -138,23 +142,20 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // whenever dash is requested, perform dash
-        if (dashRequested && dashCooldown.IsReady() && playerStats.stamina.Has(dashStamina) && moveInput != Vector2.zero)
-        {
-            Dash();
-        }
+        AttemptDash();
 
         if (isDashing) {
             // dash afterimage
-            if (Time.time > lastAfterimageTime + afterimageTime) {
+            if (afterimageCooldown.IsReady()) {
                 PlayerAfterimagePool.Instance.GetFromPool();
-                lastAfterimageTime = Time.time;
+                afterimageCooldown.Trigger();
             }
 
             // stop dashing effect when additional velocity is low enough
             if (additionalVelocity.magnitude < 1f)
             {
                 isDashing = false;
+                BaseEnemyBehavior.EnableCollision();
             }
         }
 

@@ -25,6 +25,16 @@ public class BaseEnemyBehavior : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("Player");
     }
 
+    public static void DisableCollision()
+    {
+        Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), LayerMask.NameToLayer("Enemy"), true);
+    }
+
+    public static void EnableCollision()
+    {
+        Physics2D.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), LayerMask.NameToLayer("Enemy"), false);
+    }
+
     // enemy explosion whenever it dies
     public void ExplodeEnemy()
     {

@@ -73,8 +73,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -1710260873
+  m_SortingLayer: 1
   m_SortingOrder: 0
   m_Sprite: {fileID: 2395158100669332950, guid: 1f4396d616b8e5a4dae43cfe00f9e667, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -291,17 +291,9 @@ MonoBehaviour:
   frictionCoefficient: 0.0001
   dashStrength: 60
   dashStamina: 10
-  health:
-    maxValue: 100
-    regenerationRate: 10
-    regenerationDelay: 2
-  stamina:
-    maxValue: 30
-    regenerationRate: 10
-    regenerationDelay: 1
-  iframes: 0.5
   dashParticles: {fileID: 3042794193209241396, guid: b01a84715a3944c499da333d27ca2e7a, type: 3}
   afterimageTime: 0.05
+  playerStats: {fileID: 0}
 --- !u!114 &7698865362086247452
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -340,11 +332,15 @@ MonoBehaviour:
   health:
     maxValue: 100
     regenerationRate: 10
-    regenerationDelay: 2
+    regenerationCooldown:
+      cooldownDuration: 0
   stamina:
     maxValue: 30
     regenerationRate: 10
-    regenerationDelay: 1
+    regenerationCooldown:
+      cooldownDuration: 0
+  iframes:
+    cooldownDuration: 0.5
 --- !u!1 &5045886218572615934
 GameObject:
   m_ObjectHideFlags: 0
