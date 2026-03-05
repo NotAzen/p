@@ -18,10 +18,6 @@ public class PlayerController : MonoBehaviour
     public float dashStrength = 10f;
     public float dashStamina = 10f;
 
-    //[Header("Invincibility Frames")]
-    //public float iframes = 0.5f;              // invincibility frames after taking damage
-    //private float iframeStartTime;            // time when invincibility frames started
-
     [Header("Particle Effects")]
     [SerializeField] private ParticleSystem dashParticles; // dash particle effect
     private ParticleSystem dashParticlesInstance;          // dash particle instance
@@ -37,9 +33,7 @@ public class PlayerController : MonoBehaviour
     private bool isDashing;             // whether player is currently dashing
 
     [Header("Afterimage Variables")]
-    [SerializeField] private Cooldown afterimageCooldown = new(0.05f);
-    //private float lastAfterimageTime;    // last time an afterimage was created
-    //[SerializeField] public float afterimageTime = 0.05f; // time between afterimages
+    [SerializeField] private Cooldown afterimageCooldown = new(0.1f);
 
     [Header("Player Statistics")]
     public PlayerStatistics playerStats;
@@ -60,6 +54,14 @@ public class PlayerController : MonoBehaviour
     private void OnCollisionEnter2D(Collision2D collision)
     {
         // if anything needs to be handled on collision, do it here
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("Winpad"))
+        {
+
+        }
     }
 
     // movement input handler

@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -14,7 +15,8 @@ public class RoomSpawner : MonoBehaviour
 
     // reference to RoomTemplates
     private RoomTemplates templates;
-    private DungeonController dungeon;
+    private GameObject dungeon;
+    private DungeonController dungeonController;
     private int randomDoorIndex;
 
     private List<GameObject[]> roomClass;
@@ -25,12 +27,22 @@ public class RoomSpawner : MonoBehaviour
     void Start()
     {
         // find the RoomTemplates object in the scene
-        GameObject dungeonController = GameObject.FindWithTag("Dungeon");
-        templates = dungeonController.GetComponent<RoomTemplates>();
-        dungeon = dungeonController.GetComponent<DungeonController>();
+        dungeon = GameObject.FindWithTag("Dungeon");
+        templates = dungeon.GetComponent<RoomTemplates>();
+        dungeonController = dungeon.GetComponent<DungeonController>();
 
+        StartCoroutine(Generate());
+    }
+    private IEnumerator Generate()
+    {
+        // Wait until the objectToWaitFor is not null
+        yield return new WaitUntil(() => templates.dictionaryIsBuilt);
+
+        // the rooms are now available, you can safely access it here
+        Debug.Log("rooms set up :3c");
+        
         // if under the spawn requirement, spawn normal rooms
-        if (dungeon.roomsSpawned < dungeon.minRooms)
+        if (dungeonController.roomsSpawned < dungeonController.minRooms)
         {
             roomClass = templates.rooms;
         }
@@ -41,11 +53,25 @@ public class RoomSpawner : MonoBehaviour
         }
 
         // spawn after delay
-        Invoke("Spawn", 0.1f);
+        Invoke("Spawn", 0.05f);
+    }
+
+    public void RegenerateRoom()
+    {
+        // don't regenerate if this is not the starting room
+        // since the starting room is the only one that can guarantee a valid dungeon layout
+        if (!gameObject.CompareTag("StartPoint"))
+        {
+            Debug.LogError("Cannot regenerate starting room!");
+            return;
+        }
+
+        spawned = false;
+        Invoke("Spawn", 0.05f);
     }
 
     // spawn rooms based on opening direction
-    void Spawn()
+    private void Spawn()
     {
         // if room already spawned, exit
         if (spawned) return;
@@ -61,10 +87,10 @@ public class RoomSpawner : MonoBehaviour
         }
 
         // increment rooms spawned count
-        dungeon.roomsSpawned++;
+        dungeonController.roomsSpawned++;
 
         // room spawning debugging
-        Debug.Log(dungeon.roomsSpawned);
+        Debug.Log(dungeonController.roomsSpawned);
 
         // indicate that a room has been spawned
         spawned = true;
@@ -73,7 +99,7 @@ public class RoomSpawner : MonoBehaviour
         {
             // spawn starting room
             case 0:
-                Instantiate(templates.startingRoom, transform.position, Quaternion.identity);
+                Instantiate(templates.startingRoom, transform.position, Quaternion.identity, dungeon.transform);
                 break;
             // spawn room with bottom door
             case 1:
@@ -101,8 +127,10 @@ public class RoomSpawner : MonoBehaviour
     private void SpawnRoom(GameObject[] roomType)
     {
         randomDoorIndex = Random.Range(0, roomType.Length);
-        Instantiate(roomType[randomDoorIndex], transform.position, Quaternion.identity);
-        
+        GameObject room = Instantiate(roomType[randomDoorIndex], transform.position, Quaternion.identity, dungeon.transform);
+
+        dungeonController.enemiesSpawned += room.GetComponent<RoomController>().EnemyCount();
+
         // room spawning debugging
         Debug.Log("SPAWNED ROOM" + transform.position + roomType[randomDoorIndex].name);
     }
@@ -117,7 +145,7 @@ public class RoomSpawner : MonoBehaviour
         // 1. collides with another spawn point
         // 2. the other spawn point has already spawned a room
         // 3. this spawn point has a higher opening direction value than the other
-        if (other.CompareTag("SpawnPoint"))
+        if (other.CompareTag("SpawnPoint") || other.CompareTag("StartPoint"))
         {
             // the other spawn point has already spawned a room
             if (other.GetComponent<RoomSpawner>().spawned) {

@@ -292,8 +292,9 @@ MonoBehaviour:
   dashStrength: 60
   dashStamina: 10
   dashParticles: {fileID: 3042794193209241396, guid: b01a84715a3944c499da333d27ca2e7a, type: 3}
-  afterimageTime: 0.05
-  playerStats: {fileID: 0}
+  afterimageCooldown:
+    cooldownDuration: 0.05
+  playerStats: {fileID: 2916896113561122237}
 --- !u!114 &7698865362086247452
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -313,8 +314,7 @@ MonoBehaviour:
   shootCooldown: 0.5
   projectileSpeed: 50
   projectileDamage: 25
-  projectileBounces: 3
-  virtualCamera: {fileID: 0}
+  projectileBounces: 0
   maxCameraDistance: 3
   cameraSmoothing: 2
 --- !u!114 &2916896113561122237
@@ -333,12 +333,12 @@ MonoBehaviour:
     maxValue: 100
     regenerationRate: 10
     regenerationCooldown:
-      cooldownDuration: 0
+      cooldownDuration: 1
   stamina:
     maxValue: 30
     regenerationRate: 10
     regenerationCooldown:
-      cooldownDuration: 0
+      cooldownDuration: 1
   iframes:
     cooldownDuration: 0.5
 --- !u!1 &5045886218572615934

@@ -10,6 +10,9 @@ TagManager:
   - PlayerProjectile
   - Enemy
   - Winpad
+  - Cinemachine
+  - StartPoint
+  - SafeZone
   layers:
   - Default
   - TransparentFX
@@ -23,7 +26,7 @@ TagManager:
   - EnemyBullets
   - Enemy
   - Ground
-  - 
+  - SafeZone
   - 
   - 
   - 

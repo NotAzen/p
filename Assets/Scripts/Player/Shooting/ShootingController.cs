@@ -30,11 +30,16 @@ public class ShootingController : MonoBehaviour
 
     // cinemachine camera
     [Header("Camera Offsetting")]
-    [SerializeField] private CinemachineFollow virtualCamera;
+    private CinemachineFollow virtualCamera;
     public float maxCameraDistance = 5f;
     public float cameraSmoothing = 0.1f;
 
     // --------------------------------------------------------------------------------- //
+
+    private void Start()
+    {
+        virtualCamera = GameObject.FindGameObjectWithTag("Cinemachine").GetComponent<CinemachineFollow>();
+    }
 
     // dash input handler
     public void OnPrimary(InputValue value)
