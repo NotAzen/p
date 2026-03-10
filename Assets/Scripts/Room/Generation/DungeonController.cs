@@ -30,6 +30,6 @@ public class DungeonController : MonoBehaviour
             Destroy(transform.GetChild(i).gameObject);
         }
 
-        startSpawner.RegenerateRoom();
+        startSpawner.RegenerateDungeon();
     }
 }

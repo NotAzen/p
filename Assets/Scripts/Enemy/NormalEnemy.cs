@@ -1,16 +1,18 @@
+using Unity.Cinemachine;
 using UnityEngine;
 
 public class NormalEnemy : MonoBehaviour
 {
     public float contactDamage = 25f;
+    public Cooldown damageInterval = new(1f); // 1 second cooldown
 
-    // if it collides with the player, deal damage
-    private void OnCollisionEnter2D(Collision2D other)
+    private void OnCollisionStay2D(Collision2D other)
     {
-        if (other.gameObject.CompareTag("Player"))
+        if (other.gameObject.CompareTag("Player") && damageInterval.IsReady())
         {
             // deal damage to player
             other.gameObject.GetComponent<PlayerController>().TakeDamage(contactDamage);
+            damageInterval.Trigger();
         }
     }
 }
