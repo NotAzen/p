@@ -4955,7 +4955,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 8183
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -5346,7 +5346,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 80
+  orthographic size: 200
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
@@ -5604,56 +5604,6 @@ MonoBehaviour:
         - {fileID: 8440774355670242742, guid: 3eb8a1c654c6f7c41acd32232a2bac20, type: 3}
         right:
         - {fileID: 5076413329009388667, guid: e765355a0f683c541a6f27494ba24011, type: 3}
-  topRooms:
-  - {fileID: 6809003372781452791, guid: 977a00e81e92727489fffae44bd1c394, type: 3}
-  - {fileID: 37513127998000890, guid: e94288e9e5942cc42b5a7d044796d70f, type: 3}
-  - {fileID: 66006277951461880, guid: 6a1a66e7823cbfd44b3433f6aabeeb19, type: 3}
-  - {fileID: 8382731867354057302, guid: 47629e3eb7cab284e8bc53e28a96bb78, type: 3}
-  - {fileID: 6140210592457381998, guid: ee64e1ee37bd83244beab1dcb1a94473, type: 3}
-  - {fileID: 4234879176284975934, guid: b0a1805d26e7a604389d6ae3d01f6d6a, type: 3}
-  - {fileID: 3046688870642942221, guid: 5d7abf0bbbd140041a98cf23e843ed4a, type: 3}
-  - {fileID: 6104961982143889367, guid: 79ce009812f26b54fab1f3b2aaeec6d6, type: 3}
-  bottomRooms:
-  - {fileID: 3896647002954540180, guid: c9b9c4b7ce190084cb270cf7ee050bf2, type: 3}
-  - {fileID: 37513127998000890, guid: e94288e9e5942cc42b5a7d044796d70f, type: 3}
-  - {fileID: 2295364395023445879, guid: fb9d81bee5850c242ae58bc3d0000f53, type: 3}
-  - {fileID: 7701049780139894279, guid: 75818babc38378048b1e413e7a3fa312, type: 3}
-  - {fileID: 6140210592457381998, guid: ee64e1ee37bd83244beab1dcb1a94473, type: 3}
-  - {fileID: 8382731867354057302, guid: 47629e3eb7cab284e8bc53e28a96bb78, type: 3}
-  - {fileID: 3046688870642942221, guid: 5d7abf0bbbd140041a98cf23e843ed4a, type: 3}
-  leftRooms:
-  - {fileID: 3896647002954540180, guid: c9b9c4b7ce190084cb270cf7ee050bf2, type: 3}
-  - {fileID: 6809003372781452791, guid: 977a00e81e92727489fffae44bd1c394, type: 3}
-  - {fileID: 37513127998000890, guid: e94288e9e5942cc42b5a7d044796d70f, type: 3}
-  - {fileID: 5442076179041661506, guid: 9a92fb06cefc06d4f9f1dfd443e70413, type: 3}
-  - {fileID: 7701049780139894279, guid: 75818babc38378048b1e413e7a3fa312, type: 3}
-  - {fileID: 6140210592457381998, guid: ee64e1ee37bd83244beab1dcb1a94473, type: 3}
-  - {fileID: 66006277951461880, guid: 6a1a66e7823cbfd44b3433f6aabeeb19, type: 3}
-  rightRooms:
-  - {fileID: 2295364395023445879, guid: fb9d81bee5850c242ae58bc3d0000f53, type: 3}
-  - {fileID: 5442076179041661506, guid: 9a92fb06cefc06d4f9f1dfd443e70413, type: 3}
-  - {fileID: 7701049780139894279, guid: 75818babc38378048b1e413e7a3fa312, type: 3}
-  - {fileID: 6140210592457381998, guid: ee64e1ee37bd83244beab1dcb1a94473, type: 3}
-  - {fileID: 4234879176284975934, guid: b0a1805d26e7a604389d6ae3d01f6d6a, type: 3}
-  - {fileID: 8382731867354057302, guid: 47629e3eb7cab284e8bc53e28a96bb78, type: 3}
-  - {fileID: 66006277951461880, guid: 6a1a66e7823cbfd44b3433f6aabeeb19, type: 3}
-  topCaps:
-  - {fileID: 7885338566509421249, guid: 7a01472c0df0e3740a6824d975ca303f, type: 3}
-  bottomCaps:
-  - {fileID: 9162919667282659424, guid: c14487c7479c5c34daf95fb117dc5f7a, type: 3}
-  leftCaps:
-  - {fileID: 4081171933832930142, guid: 82d701ca786b5484cb24b6db1cc5e2a5, type: 3}
-  rightCaps:
-  - {fileID: 5429348917577246124, guid: a27abe9e722d9e44a9550ce3bf86660c, type: 3}
-  winRoomsTop:
-  - {fileID: 8395472875614031783, guid: 5763ee04bfb34a94791219e5be87ff46, type: 3}
-  winRoomsBottom:
-  - {fileID: 1920006473872697908, guid: 1fd9e976a92e08e4d8c5624fa3ce71e1, type: 3}
-  winRoomsLeft:
-  - {fileID: 8440774355670242742, guid: 3eb8a1c654c6f7c41acd32232a2bac20, type: 3}
-  winRoomsRight:
-  - {fileID: 5076413329009388667, guid: e765355a0f683c541a6f27494ba24011, type: 3}
-  dictionaryIsBuilt: 0
 --- !u!4 &873118466
 Transform:
   m_ObjectHideFlags: 0
@@ -5683,7 +5633,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   roomsSpawned: 0
   enemiesSpawned: 0
-  minRooms: 25
+  minRooms: 10
 --- !u!1 &1020884361
 GameObject:
   m_ObjectHideFlags: 0
@@ -6528,6 +6478,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   openingDirection: 0
+  otherOpeningDirections: 
+  origin: {fileID: 0}
+  roomsSpawnable: []
+  wallChecks:
+  - {x: 0, y: -32}
+  - {x: 0, y: 32}
+  - {x: -36, y: 0}
+  - {x: 36, y: 0}
 --- !u!1 &1927663761
 GameObject:
   m_ObjectHideFlags: 0
